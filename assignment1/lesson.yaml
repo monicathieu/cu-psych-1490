@@ -37,19 +37,19 @@
   Output: 'You should see a series of file names in the output. Make sure there is a file that ends in .csv, as that''s the data file we''ll be loading.'
 
 - Class: text
-  Output: 'We''ll use the function read.csv() to read data from this CSV file into R. We need to tell read.csv() which file we want to read data from. We will do this by putting the name of the file inside the parentheses of read.csv() so that it knows where to look for the data.'
+  Output: 'We''ll use the function read_csv() to read data from this CSV file into R. We need to tell read_csv() which file we want to read data from. We will do this by putting the name of the file inside the parentheses of read_csv() so that it knows where to look for the data.'
 
 - Class: text
-  Output: 'We also need to tell R to store the info from the file in an R object so we can work with the data. We''ll do this using the left-arrow operator, <- , to take the data on the RIGHT side, and save it into the label name on the LEFT side. Then, whenever we want to access the data, we just need to tell R the label name and the data will be there.'
+  Output: 'We also need to tell R to store the info from the file in an R object so we can work with the data. We''ll do this using the left-arrow operator, <- , to take the data on the RIGHT side, and save it into the label name on the LEFT side. Then, whenever we want to access the data, we can tell R the label name and the data will be there.'
 
 - Class: cmd_question
-  Output: 'Read this CSV data file into R by entering the following command: IntroSurvey <- read.csv("classdata_2018.csv")'
-  CorrectAnswer: IntroSurvey <- read.csv("classdata_2018.csv")
-  AnswerTests: omnitest(correctExpr = 'IntroSurvey <- read.csv("classdata_2018.csv")')
-  Hint: 'Copy the following command and press Enter to run: IntroSurvey <- read.csv("classdata_2018.csv")'
+  Output: 'Read this CSV data file into R by entering the following command: IntroSurvey <- read_csv("classdata_2018.csv")'
+  CorrectAnswer: IntroSurvey <- read_csv("classdata_2018.csv")
+  AnswerTests: omnitest(correctExpr = 'IntroSurvey <- read_csv("classdata_2018.csv")')
+  Hint: 'Copy the following command and press Enter to run: IntroSurvey <- read_csv("classdata_2018.csv")'
 
 - Class: text
-  Output: 'We just read in the data saved in classdata_2018.csv, and used the left arrow <- to assign that data to the label IntroSurvey. R is case sensitive, so the label IntroSurvey is not the same as the label introsurvey. Our convention will be to label data frames with capital letters, and variables in lowercase.'
+  Output: 'We just read in the data saved in classdata_2018.csv, and used the left arrow <- to assign that data to the label IntroSurvey. R is case sensitive, so the label IntroSurvey is NOT the same as the label introsurvey. Our convention will be to label data frames with capital letters, and variables in lowercase.'
 
 - Class: text
   Output: 'Next, we''ll learn about functions that help you explore your data. Sometimes, you''ll use these to make sure your data read in correctly, and sometimes you''ll use these simply to inspect your data so you know what''s in it.'
@@ -375,6 +375,6 @@
 - Class: mult_question
   Output: Now, we will generate an email to your TA. Who is your TA?
   CorrectAnswer: NULL
-  AnswerChoices: Jonathan; Maneeza; Monica
+  AnswerChoices: Hannah; Monica; Natalie; Paul
   AnswerTests: notify()
   Hint: NULL
