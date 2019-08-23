@@ -72,16 +72,16 @@ First, you can use the code below to install these two packages if you haven't a
 
 ```{r, eval = FALSE}
 # Only run this code if you HAVEN'T already installed these packages!
-install.packages(c("ggplot2",
+install.packages(c("tidyverse",
                    "knitr"))
 ```
 
 Next, use the following code to _load,_ or "turn on", these packages for the current RStudio window so you can actually access the functions inside. You need to do this every time you open a new RStudio window!
 
 ```{r}
-# We only need to "turn on" ggplot2
+# We only need to "turn on" tidyverse
 # knitr actually works behind the scenes already!
-library(ggplot2)
+library(tidyverse)
 ```
 
 Now, we're ready to get started.
