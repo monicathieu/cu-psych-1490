@@ -7,67 +7,132 @@
   Version: 2.4.3
 
 - Class: text
-  Output: 'Welcome! In this first assignment, we''ll be learning about how to navigate R (and RStudio.) You can use R to do spreadsheet-style table manipulation (like Excel), as well as statistics (like SPSS). While it takes a little bit more time to get the hang of using R, we hope you''ll find it rewarding, and choose to use it in your future research!'
+  Output: >
+    Welcome! In this first assignment, we'll be learning about how to navigate R
+    (and RStudio.) You can use R to do spreadsheet-style table manipulation (like Excel),
+    as well as statistics (like SPSS). While it takes a little bit more time to get the hang
+    of using R, we hope you'll find it rewarding, and choose to use it in your future research!
   
 - Class: text
-  Output: 'In this assignment, we will learn how to load in a data file, inspect the data, and do some brief calculations on that data.'
+  Output: >
+    In this assignment, we will learn how to load in a data file, inspect the data, and do
+    some brief calculations on that data.
   
 - Class: text
-  Output: 'First we want to tell R where to find the data files we''ll be using.'
+  Output: >
+    First we want to tell R where to find the data files we'll be using.
   
 - Class: cmd_question
-  Output: 'Ask R "what is the current working directory?" by calling the function getwd()'
+  Output: Ask R "what is the current working directory?" by calling the function getwd()
   CorrectAnswer: getwd()
   AnswerTests: omnitest(correctExpr = 'getwd()')
   Hint: Type getwd() into your console, and press Enter to run it and see what it tells you.
 
 - Class: text
-  Output: 'You should see a file path as the output of getwd(). This tells you the folder on your computer that R is currently "inside".'
+  Output: >
+    You should see a file path as the output of getwd(). This tells you the folder on your
+    computer that R is currently "inside".
 
 - Class: text
-  Output: 'Before working with data, we need to read it into R''s environment. First, make sure you know where the dataset is saved. It should be in the your current working directory, and saved in .csv format.'
+  Output: >
+    Before working with data, we need to read it into R's environment.
+    First, make sure you know where the dataset is saved. It should be in your
+    current working directory, and saved in .csv format.
   
 - Class: cmd_question
-  Output: Ask R to show you all the files in your current working directory by calling the function list.files()
+  Output: >
+    Ask R to show you all the files in your current working directory
+    by calling the function list.files()
   CorrectAnswer: list.files()
   AnswerTests: omnitest(correctExpr = 'list.files()')
   Hint: Type list.files() into your console, and press Enter to run it and see what it tells you.
 
 - Class: text
-  Output: 'You should see a series of file names in the output. Make sure there is a file that ends in .csv, as that''s the data file we''ll be loading.'
+  Output: >
+    You should see a series of file names in the output. Make sure there is a file
+    that ends in .csv, as that's the data file we'll be loading.
 
 - Class: text
-  Output: 'We''ll use the function read_csv() to read data from this CSV file into R. We need to tell read_csv() which file we want to read data from. We will do this by putting the name of the file inside the parentheses of read_csv() so that it knows where to look for the data.'
+  Output: >
+    We'll use the function read_csv() to read data from this CSV file into R.
+    We need to tell read_csv() which file we want to read data from. We will do
+    this by putting the name of the file inside the parentheses of read_csv() so
+    that it knows where to look for the data.
 
 - Class: text
-  Output: 'We also need to tell R to store the info from the file in an R object so we can work with the data. We''ll do this using the left-arrow operator, <- , to take the data on the RIGHT side, and save it into the label name on the LEFT side. Then, whenever we want to access the data, we can tell R the label name and the data will be there.'
+  Output: >
+    We also need to tell R to store the info from the file in an R object so we
+    can work with the data. We''ll do this using the left-arrow operator, <- ,
+    to take the data on the RIGHT side, and save it into the label name on the LEFT side.
+    Then, whenever we want to access the data, we can tell R the label name
+    and the data will be there.
 
 - Class: cmd_question
-  Output: 'Read this CSV data file into R by entering the following command: IntroSurvey <- read_csv("classdata_2018.csv")'
+  Output: >
+    Read this CSV data file into R by entering the following command:
+    IntroSurvey <- read_csv("classdata_2018.csv")
   CorrectAnswer: IntroSurvey <- read_csv("classdata_2018.csv")
   AnswerTests: omnitest(correctExpr = 'IntroSurvey <- read_csv("classdata_2018.csv")')
-  Hint: 'Copy the following command and press Enter to run: IntroSurvey <- read_csv("classdata_2018.csv")'
+  Hint: >
+    Type out the following command and press Enter to run: IntroSurvey <- read_csv("classdata_2018.csv")
 
 - Class: text
-  Output: 'We just read in the data saved in classdata_2018.csv, and used the left arrow <- to assign that data to the label IntroSurvey. R is case sensitive, so the label IntroSurvey is NOT the same as the label introsurvey. Our convention will be to label data frames with capital letters, and variables in lowercase.'
+  Output: >
+    We just read in the data saved in classdata_2018.csv, and used the left arrow <- to assign
+    that data to the label IntroSurvey. R is case sensitive, so the label IntroSurvey is NOT
+    the same as the label introsurvey. Our convention will be to label data frames with
+    capital letters, and variables in lowercase.
 
 - Class: text
-  Output: 'Next, we''ll learn about functions that help you explore your data. Sometimes, you''ll use these to make sure your data read in correctly, and sometimes you''ll use these simply to inspect your data so you know what''s in it.'
+  Output: >
+    Next, we'll learn about functions that help you explore your data. Sometimes, you'll use
+    these to make sure your data read in correctly, and sometimes you'll use these simply
+    to inspect your data so you know what's in it.
 
 - Class: text
-  Output: 'The first exploring function you''ll use is str(). str() tells you the following things about an object:'
-  
-- Class: text
-  Output: 'the type of object that IntroSurvey is, the number of observations and number of variables (dimensions) of IntroSurvey, a list of each variable and its class (interval, factor, numeric, etc.), and for each variable, a list of all values'
-  
+  Output: |
+    The first exploring function you'll use is str(). str() tells you the following things
+    about an object:
+    
+    the type of object it is
+    
+    the number of observations (rows) and number of variables (columns), if applicable
+    
+    the name of each column and its class (interval, factor, numeric, etc.)
+    
+    and for each column, a list of all unique values
+
 - Class: cmd_question
-  Output: 'Enter the following command and inspect the output: str(IntroSurvey)'
+  Output: >
+    Enter the following command and inspect the output: str(IntroSurvey)
   CorrectAnswer: str(IntroSurvey)
   AnswerTests: omnitest(correctExpr = 'str(IntroSurvey)')
-  Hint: 'Copy the following command and press Enter to run: str(IntroSurvey)'
+  Hint: >
+    Type out the following command and press Enter to run: str(IntroSurvey)
 
 - Class: text
-  Output: 'Now, here are some questions about what str() tells you.'
+  Output: >
+    You may have noticed that as you typed into the console, R began suggesting auto-complete options
+    to you based on the letters you'd typed already. This can save you time while typing, and can
+    also help you avoid typos (as long as you choose the right auto-complete suggestion). When R
+    starts to suggest auto-complete options, you can choose one by hitting the up and down arrow keys
+    to highlight the auto-complete you want, and then hitting Tab to complete it out into console.
+
+- Class: cmd_question
+  Output: |
+    Let's repeat the previous command, but this time, try to use R's Tab auto-complete to help you.
+    
+    Type out the following command and inspect the output: str(IntroSurvey)
+  CorrectAnswer: str(IntroSurvey)
+  AnswerTests: omnitest(correctExpr = 'str(IntroSurvey)')
+  Hint: |
+    Type out the following command, using up and down arrow keys to choose an auto-complete
+    suggestion and using Tab to complete the suggestion out. Then press Enter to run:
+    
+    str(IntroSurvey)
+
+- Class: text
+  Output: Now, here are some questions about what str() tells you.
 
 - Class: mult_question
   Output: Does str() tell you the names of the columns in a dataframe?
@@ -88,16 +153,20 @@
   AnswerTests: omnitest(correctVal = 'Yes')
 
 - Class: text
-  Output: 'The next exploring function you''ll use is head(). head() prints out the first few rows of a dataframe, so you can peek at what the data look like.'
+  Output: >
+    The next exploring function you'll use is head(). head() prints out the first
+    few rows of a dataframe, so you can peek at what the data look like.
   
 - Class: cmd_question
-  Output: 'Enter the following command and inspect the output: head(IntroSurvey)'
+  Output: >
+    Enter the following command and inspect the output: head(IntroSurvey)
   CorrectAnswer: head(IntroSurvey)
   AnswerTests: omnitest(correctExpr = 'head(IntroSurvey)')
-  Hint: 'Copy the following command and press Enter to run: head(IntroSurvey)'
+  Hint: >
+    Type out the following command and press Enter to run: head(IntroSurvey)
 
 - Class: text
-  Output: 'Now, here are some questions about what head() tells you.'
+  Output: Now, here are some questions about what head() tells you.
 
 - Class: mult_question
   Output: Does head() tell you the names of the columns in a dataframe?
@@ -124,16 +193,20 @@
   AnswerTests: omnitest(correctVal = 'Yes')
 
 - Class: text
-  Output: 'The last exploring function you''ll learn about today is summary(). summary() prints out summarizing info about each column of a dataframe.'
+  Output: >
+    The last exploring function you'll learn about today is summary().
+    summary() prints out summarizing info about each column of a dataframe.
 
 - Class: cmd_question
-  Output: 'Enter the following command and inspect the output: summary(IntroSurvey)'
+  Output: >
+    Enter the following command and inspect the output: summary(IntroSurvey)
   CorrectAnswer: summary(IntroSurvey)
   AnswerTests: omnitest(correctExpr = 'summary(IntroSurvey)')
-  Hint: 'Copy the following command and press Enter to run: summary(IntroSurvey)'
+  Hint: >
+    Type out the following command and press Enter to run: summary(IntroSurvey)
 
 - Class: text
-  Output: 'Now, here are some questions about what summary() tells you.'
+  Output: Now, here are some questions about what summary() tells you.
 
 - Class: mult_question
   Output: Does summary() tell you the names of the columns in a dataframe?
@@ -166,211 +239,331 @@
   AnswerTests: omnitest(correctVal = 'Yes')
 
 - Class: text
-  Output: 'Now that we''ve explored the whole dataframe IntroSurvey, let''s look more closely at some of the columns contained in IntroSurvey.'
+  Output: >
+    Now that we've explored the whole dataframe IntroSurvey, let's look more closely at
+    some of the columns contained in IntroSurvey.
 
 - Class: text
-  Output: 'Accessing individual pieces of a larger dataframe, whether it be rows, columns, or single values, is called INDEXING. To index a column in a dataframe, we can''t just type the name of the column. We need to pull the column out of the dataframe it''s in, using a $.'
+  Output: >
+    Accessing individual pieces of a larger dataframe, whether it be rows, columns, or
+    single values, is called INDEXING. To index a column in a dataframe, we can't just
+    type the name of the column. We need to pull the column out of the dataframe it's in, using a $.
 
 - Class: text
-  Output: 'For example, to look at the age column in IntroSurvey, we need to type the following: IntroSurvey$age . In R, you use the $ as you would the / for webpages within a website, or file paths on a computer. It allows you to index a column that''s stored inside of a dataframe.'
+  Output: >
+    For example, to look at the age column in IntroSurvey, we need to type the following:
+    IntroSurvey$age . In R, you use the $ as you would the / for webpages within a website,
+    or file paths on a computer. It allows you to index a column that's stored inside of a dataframe.
+
+- Class: text
+  Output: >
+    Notice that R's auto-complete suggestions are smart. When you type the $ after IntroSurvey,
+    R begins to suggest auto-completing column names from IntroSurvey.
+    Use this to make your life easier!
 
 - Class: cmd_question
-  Output: 'Enter the following command and inspect the output: IntroSurvey$age'
+  Output: >
+    Enter the following command and inspect the output: IntroSurvey$age
   CorrectAnswer: IntroSurvey$age
   AnswerTests: omnitest(correctExpr = 'IntroSurvey$age')
-  Hint: 'Copy the following command and press Enter to run: IntroSurvey$age'
+  Hint: >
+    Type out the following command and press Enter to run: IntroSurvey$age
 
 - Class: cmd_question
-  Output: 'Index any column in IntroSurvey using the dollar sign $ operator.'
-  CorrectAnswer: 'IntroSurvey$id'
+  Output: Index any column in IntroSurvey using the dollar sign $ operator.
+  CorrectAnswer: IntroSurvey$id
   AnswerTests: expr_grepl('$')
-  Hint: 'Enter IntroSurvey$ with the name of any column in IntroSurvey after the $'
+  Hint: Enter IntroSurvey$ with the name of any column in IntroSurvey after the $
 
 - Class: text
-  Output: Now, use any of the exploration functions you've found so far to identify two numeric variables in this data.
+  Output: >
+    Now, use any of the exploration functions you've found so far to identify two
+    numeric variables in this data.
 
 - Class: cmd_question
-  Output: 'Index a numeric column in IntroSurvey using the dollar sign $ operator.'
+  Output: Index a numeric column in IntroSurvey using the dollar sign $ operator.
   CorrectAnswer: IntroSurvey$courses_enrolled
   AnswerTests: expr_grepl('$'); result_has_type('numeric')
-  Hint: 'Enter IntroSurvey$ with the name of any numeric column in IntroSurvey after the $. If you are not sure which columns are numeric, enter str(IntroSurvey) and inspect the output for columns that say "int" (for integer) or "num" (for numeric).'
+  Hint: >
+    Enter IntroSurvey$ with the name of any numeric column in IntroSurvey after the $.
+    If you are not sure which columns are numeric, enter str(IntroSurvey) and inspect
+    the output for columns that say "int" (for integer) or "num" (for numeric).
 
 - Class: cmd_question
-  Output: 'Index another numeric column in IntroSurvey using the dollar sign $ operator.'
+  Output: Index another numeric column in IntroSurvey using the dollar sign $ operator.
   CorrectAnswer: IntroSurvey$courses_shopped
   AnswerTests: expr_grepl('$'); result_has_type('numeric')
-  Hint: 'Enter IntroSurvey$ with the name of any numeric column in IntroSurvey after the $. If you are not sure which columns are numeric, enter str(IntroSurvey) and inspect the output for columns that say "int" (for integer) or "num" (for numeric).'
+  Hint: >
+    Enter IntroSurvey$ with the name of any numeric column in IntroSurvey after the $.
+    If you are not sure which columns are numeric, enter str(IntroSurvey) and inspect
+    the output for columns that say "int" (for integer) or "num" (for numeric).
 
 - Class: text
-  Output: 'Now, we''ll quickly visualize these two numeric columns. Visualizing data in a graph is a great way to quickly inspect it.'
+  Output: >
+    Now, we'll quickly visualize these two numeric columns. Visualizing data in a graph
+    is a great way to quickly inspect it.
   
 - Class: cmd_question
-  Output: 'Create a quick histogram of your first numeric column in IntroSurvey using hist().'
+  Output: Create a quick histogram of your first numeric column in IntroSurvey using hist().
   CorrectAnswer: hist(IntroSurvey$age)
   AnswerTests: expr_uses_func('hist')
-  Hint: 'Enter hist(IntroSurvey$...), where ... is the name of your numeric column in IntroSurvey, into console and press Enter.'
+  Hint: >
+    Enter hist(IntroSurvey$...), where ... is the name of your numeric column in IntroSurvey,
+    into the console and press Enter.'
   
 - Class: cmd_question
-  Output: 'Create a quick histogram of your second numeric column in IntroSurvey using hist().'
+  Output: Create a quick histogram of your second numeric column in IntroSurvey using hist().
   CorrectAnswer: hist(IntroSurvey$age)
   AnswerTests: expr_uses_func('hist')
-  Hint: 'Enter hist(IntroSurvey$...), where ... is the name of your numeric column in IntroSurvey, into console and press Enter.'
-  
+  Hint: >
+    Enter hist(IntroSurvey$...), where ... is the name of your numeric column in IntroSurvey,
+    into the console and press Enter.'
+
 - Class: text
-  Output: 'Graphical exploration is one tool you can use to explore the content of specific columns in a dataframe, but it''s not the only one. The function summary(), that we used before to explore our whole dataframe, also works on specific columns.'
+  Output: >
+    Graphical exploration is one tool you can use to explore the content of specific columns
+    in a dataframe, but it's not the only one. The function summary(), that we used before
+    to explore our whole dataframe, also works on specific columns.
 
 - Class: cmd_question
-  Output: 'Call summary() on a numeric column in IntroSurvey and inspect the output.'
+  Output: Call summary() on a NUMERIC column in IntroSurvey and inspect the output.
   CorrectAnswer: summary(IntroSurvey$age)
   AnswerTests: expr_uses_func('summary'); result_has_type('numeric')
-  Hint: 'Enter summary(IntroSurvey$...), where ... is the name of your numeric column in IntroSurvey, into console and press Enter.'
+  Hint: >
+    Enter summary(IntroSurvey$...), where ... is the name of your numeric column in IntroSurvey,
+    into the console and press Enter.
 
 - Class: cmd_question
-  Output: 'Call summary() on a factor column in IntroSurvey and inspect the output.'
+  Output: Call summary() on a FACTOR column in IntroSurvey and inspect the output.
   CorrectAnswer: summary(IntroSurvey$age)
   AnswerTests: expr_uses_func('summary'); result_has_type('integer')
-  Hint: 'Enter summary(IntroSurvey$...), where ... is the name of your factor column in IntroSurvey, into console and press Enter.  If you are not sure which columns are factor, enter str(IntroSurvey) and inspect the output for columns that say "Factor".'
+  Hint: >
+    Enter summary(IntroSurvey$...), where ... is the name of your factor column in IntroSurvey,
+    into the console and press Enter. If you are not sure which columns are factor type,
+    enter str(IntroSurvey) and inspect the output for columns that say "Factor".'
   
 - Class: text
-  Output: 'Now, let''s find specific descriptive statistics about specific columns in our data.'
+  Output: Now, let's find specific descriptive statistics about specific columns in our data.
 
 - Class: cmd_question
-  Output: 'Use the function mean() to find the mean age of students in the dataframe.'
+  Output: Use the function mean() to find the mean age of students in the dataframe.
   CorrectAnswer: mean(IntroSurvey$age)
   AnswerTests: omnitest(correctExpr = 'mean(IntroSurvey$age)')
-  Hint: 'Call the function mean() on the age column in IntroSurvey by entering the following into console: mean(IntroSurvey$age)'
+  Hint: >
+    Call the function mean() on the age column in IntroSurvey by entering the following
+    into console: mean(IntroSurvey$age)
   
 - Class: text
-  Output: 'Why does it say NA? This means "not available." R is telling you it can''t compute a mean. This happens when you have one or more missing values.'
+  Output: >
+    Why does it say NA? This means "not available." R is telling you it can't compute a mean.
+    This happens when you have one or more missing values.
 
 - Class: cmd_question
-  Output: Look at the full contents of the age column of IntroSurvey in console to see if there is missing data in the column.
+  Output: >
+    Look at the full contents of the age column of IntroSurvey in console to see
+    if there is missing data in the column.
   CorrectAnswer: IntroSurvey$age
   AnswerTests: omnitest(correctExpr = 'IntroSurvey$age')
-  Hint: To output the full contents of the age column to console, index the column from IntroSurvey by entering IntroSurvey$age into console.
+  Hint: >
+    To output the full contents of the age column to console, index the column from
+    IntroSurvey by entering IntroSurvey$age into console.
   
 - Class: text
-  Output: You should see that a couple values in IntroSurvey$age are not numbers, but NA. This means that, for whatever reason in this data, some subjects have missing age data. Rats! mean(), and many other functions, will not compute if they see missing values (NA). But you can tell them to ignore missing values and compute using the rest of the data. Inside of mean(), the argument na.rm = TRUE will tell mean() to throw out missing values and compute using the remaining data.'
+  Output: >
+    You should see that a couple values in IntroSurvey$age are not numbers, but NA.
+    This means that, for whatever reason in this data, some subjects have missing age data.
+    Rats! mean(), and many other functions, will not compute if they see missing values (NA).
+    But you can tell them to ignore missing values and compute using the rest of the data.
+    Inside of mean(), the argument na.rm = TRUE will tell mean() to throw out missing values
+    and compute using the remaining data.
   
 - Class: cmd_question
-  Output: 'Add the argument " , na.rm = TRUE" (without the quotes) after the variable name within mean() to find the mean age of students in the dataframe.'
+  Output: >
+    Add the argument " , na.rm = TRUE" (without the quotes) after the variable name inside of
+    mean() to find the mean age of students in the dataframe.
   CorrectAnswer: mean(IntroSurvey$age, na.rm = TRUE)
   AnswerTests: omnitest(correctExpr = 'mean(IntroSurvey$age, na.rm = TRUE)')
-  Hint: 'Call the function mean() on the age column in IntroSurvey by entering the following into console: mean(IntroSurvey$age, na.rm = TRUE)'
+  Hint: >
+    Call the function mean() on the age column in IntroSurvey with na.rm = TRUE by entering
+    the following into console: mean(IntroSurvey$age, na.rm = TRUE)
   
 - Class: text
-  Output: 'We now know how to index columns in a dataframe using the $ operator. But what if we want to select just some rows in that column? To index partial columns, we will use hard brackets []. Inside the hard brackets, we will tell R which part of the column we want to index.'
+  Output: >
+    We now know how to index columns in a dataframe using the $ operator.
+    But what if we want to select just some rows in that column? To index partial columns,
+    we will use hard brackets []. Inside the hard brackets, we will tell R which part
+    of the column we want to index.
 
 - Class: text
-  Output: 'Usually, when we want to index partial dataframe columns, we only want parts of the column that satisfy some conditions. For example, what if we want to index only the class years for all participants who are older than 21 years? We would use the command IntroSurvey$class[IntroSurvey$age > 21] . Inside the hard brackets, we have entered a logical statement. This works because in our dataframe, each row contains the data for a single participant. This means that every value of "class" belongs to the same participant as the value of "age" in the corresponding row of the dataframe. Thus, we can index partial dataframe columns using logical statements about the values of other columns.'
+  Output: >
+    Usually, when we want to index partial dataframe columns, we only want parts of the column
+    that satisfy some conditions. For example, what if we want to index only the class years
+    for all participants who are older than 21 years? We would use the command
+    IntroSurvey$class[IntroSurvey$age > 21] . Inside the hard brackets, we have entered a
+    LOGICAL statement. This works because in our dataframe, each row contains the data for a
+    single participant. This means that every value of "class" belongs to the same participant
+    as the value of "age" in the corresponding row of the dataframe. Thus, we can index
+    partial dataframe columns using logical statements about the values of other columns.
   
 - Class: text
-  Output: 'For logical statements on numeric columns, we can use the following operators:'
+  Output: >
+    For logical statements on numeric columns, we can use the following operators:
 
 - Class: text
-  Output: '== (is equal to), != (is not equal to)'
+  Output: == (is equal to), != (is not equal to)
 
 - Class: text
-  Output: '> (greater than), >= (greater than or equal to)'
+  Output: > (greater than), >= (greater than or equal to)
   
 - Class: text
-  Output: '< (less than), <= (less than or equal to)'
+  Output: < (less than), <= (less than or equal to)
 
 - Class: text
-  Output: 'For logical statements on text columns, we can use the following operators:'
+  Output: >
+    For logical statements on text columns, we can use the following operators:
 
 - Class: text
-  Output: '== , != . These will check if the string (piece of character data) on the left is equal to the string on the right or not.'
+  Output: == (is equal to), != (is not equal to)
   
 - Class: text
-  Output: 'For example, IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"] will index all the values of enrolled courses for female-identified students. Notice that for character data, you need to have quotation marks around the data (e.g. "F") so that R knows that you''re referring to character data.'
+  Output: >
+    These will check if the string (piece of character data) on the left is equal
+    to the string on the right or not.
+  
+- Class: text
+  Output: >
+    For example, IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"] will index all
+    the values of enrolled courses for female-identified students. Notice that for character
+    data, you need to have quotation marks around the data (e.g. "F") so that R knows that you're
+    referring to character data.
 
 - Class: cmd_question
-  Output: 'Enter IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"] to see the number of courses enrolled in by only your female-identifying classmates.'
+  Output: >
+    Enter IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"] to see the number of
+    courses enrolled in by only your female-identifying classmates.
   CorrectAnswer: IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"]
   AnswerTests: omnitest(correctExpr = 'IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"]')
-  Hint: 'Copy the following code, paste it into console and press Enter: IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"]'
+  Hint: >
+    Type out the following code, paste it into console and press Enter:
+    IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"]
   
 - Class: cmd_question
-  Output: 'Now, we''ll try another one. Use hard brackets and a logical statement to index the school affiliations of all left-handed participants.'
+  Output: >
+    Now, we'll try another one. Use hard brackets and a logical statement to index
+    the school affiliations of all left-handed participants.
   CorrectAnswer: IntroSurvey$school[IntroSurvey$handed == "L"]
   AnswerTests: omnitest(correctExpr = 'IntroSurvey$school[IntroSurvey$handed == "L"]')
-  Hint: 'Call the school column of IntroSurvey, and then hard-bracket index it, with a logical statement on the inside selecting all values of the handedness column corresponding to left-handers.'
+  Hint: >
+    Call the school column of IntroSurvey, and then hard-bracket index it,
+    with a logical statement on the inside selecting all values of the handedness column
+    corresponding to left-handers.
 
 - Class: text
-  Output: 'Now, let''s calculate some descriptive statistics on our data! For the next set of questions, each question will have two parts. The first part will ask you to type in the correct code to calculate a particular descriptive statistic. The second part will ask you to type in the correct value of the descriptive statistic. You can enter the number that is output by the answer to the first part of the question to answer the second part of the question.'
+  Output: >
+    Now, let's calculate some descriptive statistics on our data! For the next set of questions,
+    each question will have two parts. The first part will ask you to type in the correct code
+    to calculate a particular descriptive statistic. The second part will ask you to type in
+    the correct value of the descriptive statistic. You can enter the number that is output by
+    the answer to the first part of the question to answer the second part of the question.
   
 - Class: cmd_question
-  Output: 'Enter a command to calculate the mean number of psychology classes taken by our participants.'
+  Output: Enter a command to calculate the mean number of psychology classes taken by our participants.
   CorrectAnswer: mean(IntroSurvey$psych_courses, na.rm = TRUE)
   AnswerTests: omnitest(correctExpr = 'mean(IntroSurvey$psych_courses, na.rm = TRUE)')
-  Hint: 'Index the psych_courses column of IntroSurvey, and feed it into mean(). Be careful of missing data!'
+  Hint: >
+    Index the psych_courses column of IntroSurvey, and feed it into mean().
+    Be careful of missing data!
   
 - Class: exact_question
-  Output: 'What is the mean number of psychology classes taken by our participants?'
+  Output: What is the mean number of psychology classes taken by our participants?
   CorrectAnswer: 4.4
   AnswerTests: val_rounded_equals(4.4, digits = 1)
-  Hint: 'You can re-enter the command from the previous question, or copy the number that was output by the previous command and paste it back into console.'
+  Hint: >
+    You can re-enter the command from the previous question,
+    or copy the number that was output by the previous command and paste it back into console.
   
 - Class: cmd_question
-  Output: 'Enter a command that tells you how many participants are left-handed.'
+  Output: Enter a command that tells you how many participants are left-handed.
   CorrectAnswer: summary(IntroSurvey$handed)
   AnswerTests: any_of_exprs('summary(IntroSurvey$handed)', 'sum(IntroSurvey$handed == "L")')
-  Hint: 'Try using summary() to take a look at the handedness column.'
+  Hint: Try using summary() to take a look at the handedness column.
   
 - Class: exact_question
-  Output: 'How many participants are left-handed?'
+  Output: How many participants are left-handed?
   CorrectAnswer: 4
   AnswerTests: omnitest(correctVal = 4)
-  Hint: 'Copy the correct number that was output by the previous command and paste it back into console.'
+  Hint: Copy the correct number that was output by the previous command and paste it back into console.
   
 - Class: cmd_question
-  Output: 'Enter a command to calculate the mean age of the juniors.'
+  Output: Enter a command to calculate the mean age of the juniors.
   CorrectAnswer: mean(IntroSurvey$age[IntroSurvey$class == "Junior"])
   AnswerTests: omnitest(correctExpr = 'mean(IntroSurvey$age[IntroSurvey$class == "Junior"])')
-  Hint: 'Index the age column of IntroSurvey, but use hard brackets to index only the ages of juniors. Then feed that into mean().'
+  Hint: >
+    Index the age column of IntroSurvey, but use hard brackets to index only the ages
+    of juniors. Then feed that into mean().
   
 - Class: exact_question
-  Output: 'What is the mean age of the juniors?'
+  Output: What is the mean age of the juniors?
   CorrectAnswer: 22.3
   AnswerTests: val_rounded_equals(22.3, digits = 1)
-  Hint: 'You can re-enter the command from the previous question, or copy the number that was output by the previous command and paste it back into console.'
+  Hint: >
+    You can re-enter the command from the previous question,
+    or copy the number that was output by the previous command and paste it back into console.
   
 - Class: text
-  Output: 'For the last part of this assignment, we''ll create new columns in our dataframe for values calculated from existing columns. For example, you can use this to create columns that contain row-wise means of other columns.'
+  Output: >
+    For the last part of this assignment, we'll create new columns in our dataframe
+    for values calculated from existing columns. For example, you can use this to create
+    columns that contain row-wise means of other columns.
   
 - Class: text
-  Output: 'In our dataframe, we will calculate each participant''s score on the "Regret Scale" (Schwartz et al., 2002) by averaging the scores on each of 5 different questions: regret1, regret2, regret3, regret4, and regret5.'
+  Output: >
+    In our dataframe, we will calculate each participant's score on the "Regret Scale"
+    (Schwartz et al., 2002) by averaging the scores on each of 5 different questions:
+    regret1, regret2, regret3, regret4, and regret5.
   
 - Class: text
   Output: 'We can use the function rowMeans() to calculate the mean value for every row of a dataframe. Then, we''ll assign the output of rowMeans() to a new column in IntroSurvey so we can keep everyone''s Regret Scale scores with all of their other data.'
   
 - Class: cmd_question
-  Output: 'Run the following command to calculate the mean Regret Scale score from the 5 questions: IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))'
+  Output: >
+    Run the following command to calculate the mean Regret Scale score from the 5 questions:
+    IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2,
+    IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
   CorrectAnswer: IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
   AnswerTests: omnitest(correctExpr = 'IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))')
-  Hint: 'Copy the following command and paste it into the console: IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))'
+  Hint: >
+    Type out the following command and paste it into the console:
+    IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2,
+    IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
   
 - Class: cmd_question
-  Output: 'Now re-run names() on the IntroSurvey dataframe to check that the new variable is there. regret_total should show up in the names.'
+  Output: >
+    Now re-run names() on the IntroSurvey dataframe to check that the new variable is there.
+    regret_total should show up in the names.
   CorrectAnswer: names(IntroSurvey)
   AnswerTests: omnitest(correctExpr = 'names(IntroSurvey)'); 'regret_total' %in% names(IntroSurvey)
-  Hint: 'Copy the following command and paste it into the console: names(IntroSurvey)'
+  Hint: >
+    Type out the following command and paste it into the console: names(IntroSurvey)
   
 - Class: exact_question
-  Output: 'What is the mean regret score for the class?'
+  Output: What is the mean regret score for the class?
   CorrectAnswer: mean(IntroSurvey$regret_total)
   AnswerTests: val_rounded_equals(4.6, digits = 1)
-  Hint: 'Call mean() on the new regret_total column.'
+  Hint: Call mean() on the new regret_total column.
   
 - Class: exact_question
-  Output: 'What is the mean regret score for students in Columbia College?'
+  Output: What is the mean regret score for students in Columbia College?
   CorrectAnswer: mean(IntroSurvey$regret_total[IntroSurvey$CC == "CC"])
   AnswerTests: val_rounded_equals(4.8, digits = 1)
-  Hint: 'Call mean() on the appropriate subset of the regret_total column using hard-bracket indexing with a logical statement inside.'
+  Hint: >
+    Call mean() on the appropriate subset of the regret_total column using hard-bracket
+    indexing with a logical statement inside.
 
 - Class: text
-  Output: 'That concludes the first R assignment. Congratulations! Please continue to send an email notification to your TA.'
+  Output: >
+    That concludes the first R assignment. Congratulations! Please continue to send an email
+    notification to your TA.
   
 - Class: mult_question
   Output: Now, we will generate an email to your TA. Who is your TA?
