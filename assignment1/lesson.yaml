@@ -410,13 +410,16 @@
     For logical statements on numeric columns, we can use the following operators:
 
 - Class: text
-  Output: == (is equal to), != (is not equal to)
+  Output: >
+    == (is equal to), != (is not equal to)
 
 - Class: text
-  Output: > (greater than), >= (greater than or equal to)
+  Output: >
+    > (greater than), >= (greater than or equal to)
   
 - Class: text
-  Output: < (less than), <= (less than or equal to)
+  Output: >
+    < (less than), <= (less than or equal to)
 
 - Class: text
   Output: >
@@ -510,56 +513,6 @@
     You can re-enter the command from the previous question,
     or copy the number that was output by the previous command and paste it back into console.
   
-- Class: text
-  Output: >
-    For the last part of this assignment, we'll create new columns in our dataframe
-    for values calculated from existing columns. For example, you can use this to create
-    columns that contain row-wise means of other columns.
-  
-- Class: text
-  Output: >
-    In our dataframe, we will calculate each participant's score on the "Regret Scale"
-    (Schwartz et al., 2002) by averaging the scores on each of 5 different questions:
-    regret1, regret2, regret3, regret4, and regret5.
-  
-- Class: text
-  Output: 'We can use the function rowMeans() to calculate the mean value for every row of a dataframe. Then, we''ll assign the output of rowMeans() to a new column in IntroSurvey so we can keep everyone''s Regret Scale scores with all of their other data.'
-  
-- Class: cmd_question
-  Output: >
-    Run the following command to calculate the mean Regret Scale score from the 5 questions:
-    IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2,
-    IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
-  CorrectAnswer: IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
-  AnswerTests: omnitest(correctExpr = 'IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))')
-  Hint: >
-    Type out the following command and paste it into the console:
-    IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2,
-    IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
-  
-- Class: cmd_question
-  Output: >
-    Now re-run names() on the IntroSurvey dataframe to check that the new variable is there.
-    regret_total should show up in the names.
-  CorrectAnswer: names(IntroSurvey)
-  AnswerTests: omnitest(correctExpr = 'names(IntroSurvey)'); 'regret_total' %in% names(IntroSurvey)
-  Hint: >
-    Type out the following command and paste it into the console: names(IntroSurvey)
-  
-- Class: exact_question
-  Output: What is the mean regret score for the class?
-  CorrectAnswer: mean(IntroSurvey$regret_total)
-  AnswerTests: val_rounded_equals(4.6, digits = 1)
-  Hint: Call mean() on the new regret_total column.
-  
-- Class: exact_question
-  Output: What is the mean regret score for students in Columbia College?
-  CorrectAnswer: mean(IntroSurvey$regret_total[IntroSurvey$CC == "CC"])
-  AnswerTests: val_rounded_equals(4.8, digits = 1)
-  Hint: >
-    Call mean() on the appropriate subset of the regret_total column using hard-bracket
-    indexing with a logical statement inside.
-
 - Class: text
   Output: >
     That concludes the first R assignment. Congratulations! Please continue to send an email
