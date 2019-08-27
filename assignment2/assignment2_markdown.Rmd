@@ -140,7 +140,19 @@ TODO: INCORPORATE THIS that I removed from assignment 1:
 
 
 
+In this document, we will be modeling a specific order of R tasks:
+
+1. Load your raw data
+2. Prepare your data for analysis
+3. Generate descriptive statistics
+4. Generate inferential statistics
+5. Generate graphs
+
+This is important because R documents execute their code **in order** from **beginning to end,** or **from top to bottom.** All the code at the end of the document _assumes_ that code at the beginning of the document has _already been run._ For example, if you want to run a t-test on a particular mean questionnaire score that you must calculate from your raw data, the code to calculate that mean score needs to come _before_ the code that runs the t-test.
+
 # Loading raw data into R
+
+The _first_ thing you do in any data analysis document is to load your fresh raw data into R so you can later work with and calculate statistics on your data.
 
 ## 1.
 
@@ -153,7 +165,7 @@ Check your working directory using `getwd()`. If you opened RStudio via the R pr
 
 ## 2.
 
-Read in your data file using `read_csv("classdata_2018.csv")`, and assign it to the dataframe name `IntroSurveyRaw` using the `<-` left-arrow operator.
+Read in your data file using `read_csv("classdata_2018.csv")`, and assign it to the dataframe name `IntroSurvey` using the `<-` left-arrow operator.
 
 ```{r}
 # Code goes here
@@ -187,35 +199,34 @@ Use the following exploration functions to check that the dataframe `IntroSurvey
 
 # Cleaning and manipulating your data
 
+Before we calculate any statistics on our data, we may need to clean the raw data, or calculate additional values of interest in our data. It is important to do this before calculating any statistics, so that any values you may need for your statistics are already present in your data by the time you run your "analysis" code.
+
 ## 4.
 
 Calculating variables from the Regret and Maximization scales:
 
-Run the code below to create a new variable for overall Regret Score per the Regret Scale in the `IntroSurvey` dataframe called `regret_total`.
+Run the code below to create two new columns in `IntroSurvey`:
 
-```{r OLD}
-IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1,
-                                           IntroSurvey$regret2,
-                                           IntroSurvey$regret3,
-                                           IntroSurvey$regret4,
-                                           IntroSurvey$regret5))
-```
+* `regret_total`, for overall Regret Score on the Regret Scale (`regret1` to `regret5`)
+* `maxi_total`, for overall Maximizing score on the Maximizing Scale
+You'll take the approach used above to calculate an overall Maximizing score from the six items we took from the short version of the Maximizing Scale. They are called `maxi1`, `maxi2`, `maxi3`, etc.
 
-```{r}
-IntroSurvey <- mutate(IntroSurveyRaw,
-                      regret_total = (regret1 + regret2 + regret3 + regret4 + regret5) / 5)
+First, assign a new variable called that is the average of all six `maxi` scores (if you need help, see the code above for calculating the mean regret score).
+
+
+```{r TEACH ME 1}
+IntroSurvey <- mutate(IntroSurvey,
+                      regret_total = (regret1 + regret2 + regret3 + regret4 + regret5) / 5,
+                      maxi_total = (maxi1 + maxi2 + maxi3 + maxi4 + maxi5 + maxi6) / 6)
 ```
 
 You will be using the function `mutate()` to **add new columns to a dataframe,** or **overwrite existing columns in a dataframe.** Anytime you want to calculate a new column that may be some combination of existing columns, like averaging the values across multiple columns, `mutate()` is the function you want.
 
+You can create as many new columns as you want inside of one `mutate()` command, as long as you separate each row of column-creating code with a comma. To help your code look more readable, press Enter after the comma at the end of each row of column-creating code, to actually get each row of code on its own row.
+
 You'll take the approach used above to calculate an overall Maximizing score from the six items we took from the short version of the Maximizing Scale. They are called `maxi1`, `maxi2`, `maxi3`, etc.
 
 First, assign a new variable called `maxi_total` that is the average of all six `maxi` scores (if you need help, see the code above for calculating the mean regret score).
-
-```{r}
-# Code goes here
-
-```
 
 The Maximizing Scale has been shown to divide up into three subscales:
 
