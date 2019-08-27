@@ -201,32 +201,26 @@ Use the following exploration functions to check that the dataframe `IntroSurvey
 
 Before we calculate any statistics on our data, we may need to clean the raw data, or calculate additional values of interest in our data. It is important to do this before calculating any statistics, so that any values you may need for your statistics are already present in your data by the time you run your "analysis" code.
 
-## 4.
+## 4. Calculating overall scores for the Regret and Maximization scales
 
-Calculating variables from the Regret and Maximization scales:
+First, we will show you how to create new columns in your data.
 
-Run the code below to create two new columns in `IntroSurvey`:
+The code below will calculate two new columns based on existing raw data in `IntroSurvey`:
 
-* `regret_total`, for overall Regret Score on the Regret Scale (`regret1` to `regret5`)
-* `maxi_total`, for overall Maximizing score on the Maximizing Scale
-You'll take the approach used above to calculate an overall Maximizing score from the six items we took from the short version of the Maximizing Scale. They are called `maxi1`, `maxi2`, `maxi3`, etc.
+* `regret_total`, for overall Regret Score on the Regret Scale, by averaging all 5 individual regret scores, `regret1` to `regret5`
+* `maxi_total`, for overall Maximizing score on the Maximizing Scale, by averaging all 6 individual regret scores, `maxi1` to `maxi6`
 
-First, assign a new variable called that is the average of all six `maxi` scores (if you need help, see the code above for calculating the mean regret score).
-
-
-```{r TEACH ME 1}
+```{r TEACH ME mutate}
 IntroSurvey <- mutate(IntroSurvey,
                       regret_total = (regret1 + regret2 + regret3 + regret4 + regret5) / 5,
                       maxi_total = (maxi1 + maxi2 + maxi3 + maxi4 + maxi5 + maxi6) / 6)
 ```
 
-You will be using the function `mutate()` to **add new columns to a dataframe,** or **overwrite existing columns in a dataframe.** Anytime you want to calculate a new column that may be some combination of existing columns, like averaging the values across multiple columns, `mutate()` is the function you want.
+You will be using the function `mutate()` that you see above to **add new columns to a dataframe,** or **overwrite existing columns in a dataframe.** Anytime you want to calculate a new column that may be some combination of existing columns, like averaging the values across multiple columns, `mutate()` is the function you want.
 
 You can create as many new columns as you want inside of one `mutate()` command, as long as you separate each row of column-creating code with a comma. To help your code look more readable, press Enter after the comma at the end of each row of column-creating code, to actually get each row of code on its own row.
 
-You'll take the approach used above to calculate an overall Maximizing score from the six items we took from the short version of the Maximizing Scale. They are called `maxi1`, `maxi2`, `maxi3`, etc.
-
-First, assign a new variable called `maxi_total` that is the average of all six `maxi` scores (if you need help, see the code above for calculating the mean regret score).
+Now, it's your turn to calculate some new columns of data.
 
 The Maximizing Scale has been shown to divide up into three subscales:
 
@@ -234,14 +228,14 @@ The Maximizing Scale has been shown to divide up into three subscales:
 * Decision Difficulty (`maxi2` & `maxi5`)
 * High Standards (`maxi4` & `maxi6`)
 
-Please assign three new variables in the `IntroSurvey` dataframe, each of which represents one subscale: `maxi_as`, `maxi_dd`, and `maxi_hs`. (Hint: you should be averaging the two scores for each.)
+Please use the approach seen above to assign three new variables in the `IntroSurvey` dataframe, each of which represents one subscale: `maxi_as`, `maxi_dd`, and `maxi_hs`. (Hint: you should be averaging the two `maxi` scores for each.)
 
 ```{r}
 # Code goes here
 
 ```
 
-## 5.
+## 5. Checking to make sure your manipulation code worked
 
 Use `head()` to check that the following new variables are present in `IntroSurvey`:
 
@@ -259,13 +253,15 @@ Use `head()` to check that the following new variables are present in `IntroSurv
 
 ## 6.
 
+### a. Calculate means/SDs using summarize()
+
 Now we can start doing some real data analysis! For the purposes of getting practice in a variety of inferential statistics in R, we'll be running more exploratory tests than would normally be considered wise for a real study. We'll talk more about why this is a problem later in the semester, but hopefully in your stats class you talked about the dangers of running too many tests--i.e., alpha-inflation.
 
-Let's start with some simple descriptive statistics on our new variables. Use `mean()` and `sd()` to find the mean and standard deviations for:
+Let's start with some descriptive summary statistics on our new variables.
 
-total regret score
+To calculate multiple summary statistics on one dataframe at once, we will use `summarize()`. As an example, first let's calculate both the mean and standard devation of the total regret score across all subjects.
 
-```{r TEACH ME 2}
+```{r TEACH ME summarize}
 # First, create a summary dataframe to hold the relevant info
 regret_total_summary <- summarize(IntroSurvey,
                                   mean_regret_total = mean(regret_total, na.rm = TRUE),
@@ -274,6 +270,10 @@ regret_total_summary <- summarize(IntroSurvey,
 # Then print the dataframe to show the summary values inside
 regret_total_summary
 ```
+
+The syntax you use to calculate summary stats with `summarize()` is similar to the syntax you use to create new columns with `mutate()` like we did earlier. You can calculate multiple summary stats in the same `summarize()` command as long as you separate every new stat you want to calculate with a comma.
+
+Use `mean()` and `sd()` to find the mean and standard deviations for:
 
 total maximizing score
 
@@ -289,21 +289,13 @@ each of the 3 maxi subscales.
 
 ```
 
-```{r}
-# Code goes here
-
-```
-
-```{r}
-# Code goes here
-
-```
+### b. Show quick histograms using hist()
 
 Use `hist()` to visualize the range of scores for each of the variables you just calculated the mean and standard deviation for:
 
 total regret score
 
-```{r}
+```{r TEACH ME hist}
 # Code goes here
 
 ```
@@ -332,13 +324,17 @@ each of the 3 maxi subscales
 
 ```
 
-Use `summary()` to get a summary of some of our _categorical_ variables (variables that are not numeric, but rather can take on one of a few specified categories):
+### c. Count categorical values using count()
 
-`class`
+Histograms are a fantastic way to visualize a summary of continuous, numeric variables. However, not all data are numeric--sometimes variables of interest are _categorical_, where each observation is one of a few specified levels.
 
-```{r}
-# Code goes here
+We can use the function `count()` to see how many observations occur at each level of a categorical variable. For example, let's use `count()` to count how many values are in each level of the column `class`. This will tell us how many participants are in each class year in our `IntroSurvey` data.
 
+```{r TEACH ME count}
+count_class <- count(IntroSurvey,
+                     class)
+
+count_class
 ```
 
 `school`
@@ -355,7 +351,14 @@ Use `summary()` to get a summary of some of our _categorical_ variables (variabl
 
 ```
 
-Explore at least **5** other variables that you think might have a relationship with maximizing and/or regret. If the variable is _numeric_ or _interval_ (i.e., if its responses are numbers), compute the mean and sd, and produce a histogram. If the variable is _categorical_, produce a summary.
+
+### d.
+
+Explore at least **5** other variables that you think might have a relationship with maximizing and/or regret.
+
+If the variable is _numeric_ or _interval_ (i.e., if its responses are numbers), use `summarize()` with `mean()` and `sd()` to compute the mean and standard deviation, and use `hist()` to produce a histogram.
+
+If the variable is _categorical_, use `count()` to count the values in each level of the variable.
 
 ```{r}
 # Code goes here
