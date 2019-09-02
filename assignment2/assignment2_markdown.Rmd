@@ -273,7 +273,7 @@ regret_total_summary
 
 The syntax you use to calculate summary stats with `summarize()` is similar to the syntax you use to create new columns with `mutate()` like we did earlier. You can calculate multiple summary stats in the same `summarize()` command as long as you separate every new stat you want to calculate with a comma.
 
-Use `mean()` and `sd()` to find the mean and standard deviations for:
+Use `mean()` and `sd()` inside of `summarize()` to find the mean and standard deviations for:
 
 total maximizing score
 
@@ -282,7 +282,7 @@ total maximizing score
 
 ```
 
-each of the 3 maxi subscales. 
+each of the 3 maxi subscales (You can do this all inside of one `summarize()` call) 
 
 ```{r}
 # Code goes here
@@ -291,14 +291,15 @@ each of the 3 maxi subscales.
 
 ### b. Show quick histograms using hist()
 
-Use `hist()` to visualize the range of scores for each of the variables you just calculated the mean and standard deviation for:
+Next, we will use `hist()` to visualize the distribution of scores for continuous variables in our data. As a refresher, `hist()` works a little differently than most of the functions we will use in this assignment. In most of the functions we are using, **you already specify to the function that it should look inside `IntroSurvey`, so you do not need to use the `$` to tell R where to find the columns you're referring to.** However, `hist()` isn't that smart, so you will need to use the `$` to tell it to generate a histogram of a specific column inside of a larger dataframe in your environment.
 
-total regret score
+As an example, we will first generate a histogram of the distribution of total regret scores over all students in the data.
 
 ```{r TEACH ME hist}
-# Code goes here
-
+hist(IntroSurvey$regret_total)
 ```
+
+Now, on your own, use `hist()` like we did above to generate histograms for the columns that you just calculated the mean and standard deviation for in question 6a:
 
 total maximizing score
 
@@ -307,17 +308,23 @@ total maximizing score
 
 ```
 
-each of the 3 maxi subscales
+each of the 3 maxi subscales:
+
+Alternative Search
 
 ```{r}
 # Code goes here
 
 ```
 
+Decision Difficulty
+
 ```{r}
 # Code goes here
 
 ```
+
+High Standards
 
 ```{r}
 # Code goes here
@@ -354,7 +361,7 @@ count_class
 
 ### d.
 
-Explore at least **5** other variables that you think might have a relationship with maximizing and/or regret.
+Explore at least **3** other variables that you think might have a relationship with maximizing and/or regret.
 
 If the variable is _numeric_ or _interval_ (i.e., if its responses are numbers), use `summarize()` with `mean()` and `sd()` to compute the mean and standard deviation, and use `hist()` to produce a histogram.
 
@@ -375,16 +382,76 @@ If the variable is _categorical_, use `count()` to count the values in each leve
 
 ```
 
+## 7. Calculating summary statistics for different groups
+
+Many times, when investigating summary statistics to learn more about your data, you will want to compare values for different study groups in your participant population, in addition to reporting data across all subjects as we just learned how to do.
+
+Here, we will learn about some functions that will help you break up your summaries by participant groups.
+
+### a. Using filter() to choose subsets of rows of data
+
+First, you can use the `filter()` function to choose a subset of rows out of your data, so you can produce summaries on one group at a time.
+
+```{r TEACH ME filter}
+righties <- filter(IntroSurvey,
+                   handed == "R")
+```
+
+Inside of `filter()`, you use logical statements based on columns of your data to choose which rows to subset. If you use multiple logical statements in the same `filter()` command, separated with commas, you will choose the _intersection_ of all those logical statements, or all the rows where the first statement _and_ the second statement _and_ the third statement etc. are true.
+
+Below, use `filter()` to choose the subset of your data belonging to Columbia College-affiliated right-handed students. You can use the code above to help you, but this time, you will need _two_ logical statements inside of `filter()`.
+
 ```{r}
 # Code goes here
 
 ```
 
+Sometimes, you may want to choose just a subset of your data to operate on, but other times, you may want to calculate all summary statistics for different groups in your data at once, so you can compare them. We will learn how to do this next.
+
+### b. using group_by() and summarize() to generate summary statistics for all groups at once
+
+Remember the `summarize()` function from before? Previously, we used it to calculate summary statistics over all observations in our data. We can also use `summarize()` to calculate statistics separately for different groups in our data. In order to do this, we must tell R what groups are in our data, using a new function, `group_by()`. Then, `summarize()` will automatically calculate summary statistics separately for every group it sees in the data.
+
+Here's an example: Let's calculate the mean and SD of students' total regret scores, like we did in question 6a. This time, however, we will calculate it separately for students of every class year.
+
+```{r TEACH ME group by summarize}
+# First, create a summary dataframe to hold the relevant info
+regret_total_by_class_summary <- IntroSurvey %>%
+  group_by(class) %>%
+  summarize(mean_regret_total = mean(regret_total, na.rm = TRUE),
+            sd_regret_total = sd(regret_total, na.rm = TRUE))
+
+# Then print the dataframe to show the summary values inside
+regret_total_by_class_summary
+```
+
+If you run the code above, you'll see that you get columns for mean regret score and SD of regret score, but now instead of one summary value for all subjects, there's a separate value for each level of `class`, corresponding to each unique class year reported in the data.
+
+There is also a new command used in the code above: the pipe operator, `%>%`. The `%>%` operator does one simple, but **key,** thing: takes the object on the left-hand side and feeds it into the first argument of the function on the right-hand side.
+
+This means that you can put multiple functions together, one after the other, and R will understand and execute them in _left to right, like natural English._ In the code above, this means that we are telling R to do these things in this order:
+
+1. Take the `IntroSurvey` data object
+2. Use `group_by()` on `IntroSurvey` to tell R to group the rows of `IntroSurvey` by the `class` column
+3. Use `summarize()` on the grouped `IntroSurvey` data, calculating a mean and SD of `regret_total`
+
+It's **very important** here that `group_by()` is called _before_ `summarize()`, because otherwise R wouldn't know how to group the data before summarizing it.
+
+We will practice this a couple times.
+
+Below, group `IntroSurvey` by school affiliation (CC, Barnard, GS, etc), and then calculate mean and SD of total regret score for each school group in the data.
+
 ```{r}
 # Code goes here
 
 ```
 
+Below, group `IntroSurvey` by major affiliation, and then calculate mean and SD of total maximizing score for each major in the data.
+
+```{r}
+# Code goes here
+
+```
 
 # Calculating inferential statistics
 
@@ -542,12 +609,13 @@ Next, you'll create and inspect your own t-test objects. This time, let's test f
 
 Because we need a binary variable in order to run a t-test, here's some code to re-code school affiliation into a binary variable.
 
-To do this, we'll use the `ifelse()` function. The code below tells R to create a new variable (`school_binary`) whose value is `"B_CC"` _if_ the original variable (`school`) was either Barnard or CC, and whose value is `"GS_SPS"` _otherwise._
+To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in our data, like we did earlier. The code below tells R to create a new variable (`school_binary`) whose value is `"B_CC"` _if_ the original variable (`school`) was either Barnard or CC, and whose value is `"GS_SPS"` _otherwise._
 
 ```{r}
-IntroSurvey$school_binary <- ifelse(IntroSurvey$school %in% c("Barnard", "CC"),
-                                    "B_CC",
-                                    "GS_SPS")
+IntroSurvey <- mutate(IntroSurvey,
+                      school_binary = ifelse(school %in% c("Barnard", "CC"),
+                                             "B_CC",
+                                             "GS_SPS"))
 ```
 
 Does regret score differ by school affiliation?
@@ -570,14 +638,13 @@ Does tendency to maximize differ by school affiliation?
 
 It might be reasonable to expect that people who made their course decisions using a calculation-based mode are more likely to be maximizers than those who used an affect- or rule-based mode. So we should see if there's any difference in maximizing between those who used calculation-based modes and those who didn't.
 
-The question about decision mode allowed for 4 options (calculation, rule, role, and affect). To do a t-test, we need the variable **re-coded** as calculation vs. not-calculation. To do this, we'll use the `ifelse()` function again. The code below tells R to create a new variable (`dec_mode_2`) whose value is `"calc"` _if_ the original variable (`dec_mode`) was calculation-based, and whose value is `"not-calc"` _otherwise._
- 
-Note: Check that the levels of `IntroSurvey$dec_mode` are still correct for your dataset using `summary()`.
+The question about decision mode allowed for 4 options (calculation, rule, role, and affect). To do a t-test, we need the variable **re-coded** as calculation vs. not-calculation. To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in the data again. The code below tells R to create a new variable (`dec_mode_2`) whose value is `"calc"` _if_ the original variable (`dec_mode`) was calculation-based, and whose value is `"not-calc"` _otherwise._
 
 ```{r}
-IntroSurvey$dec_mode_2 <- ifelse(IntroSurvey$dec_mode == "calculation-based decision mode (e.g., weighing pros and cons of each course against one another)",
-                         "calc",
-                         "not-calc")
+IntroSurvey <- mutate(IntroSurvey,
+                      dec_mode_2 = ifelse(startsWith(dec_mode, "calculation-based"),
+                                          "calc",
+                                          "not-calc"))
 ```
 
 Now you can run a t-test just like above, with `dec_mode_2` as the IV and maximizing as the DV.
