@@ -463,12 +463,14 @@ Now that you have a sense for what the data show, let's look at how some of the 
 
 Let's see if age correlates with birthyear (it should!). The function `cor.test()` allows us to put in two variables, see what their correlation is, and return a p-value for that correlation.
 
-`cor.test()` allows you to run a Pearson, Kendall, or Spearman correlation, depending on what you tell it to do using the argument `method`. This time, since we just want to do a Pearson correlation, we'll use `method = "pearson"`.
+The R syntax for a correlation is `cor.test(~ var1 + var2, data = DataFrame)`. Note that because we're defining the dataframe (for today's assignment, `IntroSurvey`) within the test, we don't need to dollar-sign index it in the names of the variables. We can just use the variable name on its own (for example, inside this function, if age were one of our variables, we only need to call `age`, not `IntroSurvey$age`, because `cor.test()` already knows to look inside of `IntroSurvey`.)
+
+`cor.test()` allows you to run a Pearson, Kendall, or Spearman correlation, depending on what you tell it to do using the argument `method`. This time, since we want to do a Pearson correlation, we'll use `method = "pearson"`.
 
 First, we'll save the contents of our correlation test into the variable `cor_age_birthyear` so we can access its contents later. Then, we'll print `cor_age_birthyear` to the console, so we can visually inspect the results of the correlation test.
 
-```{r}
-cor_age_birthyear <- cor.test(IntroSurvey$age, IntroSurvey$birthyear, method = "pearson")
+```{r TEACH ME cor.test}
+cor_age_birthyear <- cor.test(~ age + birthyear, method = "pearson", data = IntroSurvey)
 
 cor_age_birthyear
 ```
@@ -489,7 +491,7 @@ cor_age_birthyear$p.value
 
 Now, we can use these variable names to refer to the Pearson's r and p-value of this correlation test. You don't have to look at the numbers and copy them over!
 
-PS: In RStudio, if you want to know all the sub-variables inside of an object, if you just type the name of the object with a `$` after it, an auto-complete menu should pop up and you can use the up and down arrow keys to look through all the possible sub-variables.
+PS: In RStudio, if you want to know all the sub-variables inside of an object, if you type the name of the object with a `$` after it, an auto-complete menu should pop up and you can use the up and down arrow keys to look through all the possible sub-variables.
 
 ### b.
 
@@ -575,7 +577,7 @@ Is the score on the Maximizing Scale (`maxi_total`) related to the self-report o
 
 We use t-tests to determine if two samples likely come from different populations. Of course, means will always differ somewhat, even if two samples are drawn from the same population. When the t-value is high enough, we conclude that it's unlikely that the two samples actually represent the same population.
 
-The R syntax for a Student's t-test is `t.test(dv ~ iv, data = DataFrame)`. Note that because we're defining the dataframe (for today's assignment, IntroSurvey) within the test, we don't need to dollar-sign index it in the names of the DV and IV variables. We can just use the variable name on its own (for example, inside this function, if age were our DV, we only need to call `age`, not `IntroSurvey$age`, because `t.test()` already knows to look inside of `IntroSurvey`.)
+The R syntax for a Student's t-test is `t.test(dv ~ iv, data = DataFrame)`. Note that because we're defining the dataframe (for today's assignment, `IntroSurvey`) within the test, we don't need to dollar-sign index it in the names of the DV and IV variables. We can just use the variable name on its own (for example, inside this function, if age were our DV, we only need to call `age`, not `IntroSurvey$age`, because `t.test()` already knows to look inside of `IntroSurvey`.)
 
 ### a. 
 
