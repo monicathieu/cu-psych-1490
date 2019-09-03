@@ -50,13 +50,15 @@ val_rounded_equals <- function (value, digits = 0) {
 notify <- function() {
   e <- get("e", parent.frame())
   
-  if (e$val == "Jonathan") {
-    address <- "jonathan.nicholas@columbia.edu"
-  } else if (e$val == "Maneeza") {
-    address <- "md2811@columbia.edu"
+  if (e$val == "Hannah") {
+    address <- "hrt2116@columbia.edu"
   } else if (e$val == "Monica") {
     address <- "monica.thieu@columbia.edu"
-  }
+  } else if (e$val == "Natalie") {
+    address <- "natalie.biderman@columbia.edu"
+  } else if (e$val == "Paul") {
+    address <- "pab2163@columbia.edu"
+  } 
   
   good <- FALSE
   while(!good) {

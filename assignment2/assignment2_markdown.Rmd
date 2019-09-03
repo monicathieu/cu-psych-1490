@@ -11,7 +11,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# 0.
+# Before you start
 
 ## How to use R Markdown documents
 
@@ -72,21 +72,89 @@ First, you can use the code below to install these two packages if you haven't a
 
 ```{r, eval = FALSE}
 # Only run this code if you HAVEN'T already installed these packages!
-install.packages(c("ggplot2",
+install.packages(c("tidyverse",
                    "knitr"))
 ```
 
 Next, use the following code to _load,_ or "turn on", these packages for the current RStudio window so you can actually access the functions inside. You need to do this every time you open a new RStudio window!
 
 ```{r}
-# We only need to "turn on" ggplot2
+# We only need to "turn on" tidyverse
 # knitr actually works behind the scenes already!
-library(ggplot2)
+library(tidyverse)
 ```
 
 Now, we're ready to get started.
 
-# 1.
+TODO: INCORPORATE THIS that I removed from assignment 1:
+
+- Class: text
+  Output: >
+    For the last part of this assignment, we'll create new columns in our dataframe
+    for values calculated from existing columns. For example, you can use this to create
+    columns that contain row-wise means of other columns.
+  
+- Class: text
+  Output: >
+    In our dataframe, we will calculate each participant's score on the "Regret Scale"
+    (Schwartz et al., 2002) by averaging the scores on each of 5 different questions:
+    regret1, regret2, regret3, regret4, and regret5.
+  
+- Class: text
+  Output: 'We can use the function rowMeans() to calculate the mean value for every row of a dataframe. Then, we''ll assign the output of rowMeans() to a new column in IntroSurvey so we can keep everyone''s Regret Scale scores with all of their other data.'
+  
+- Class: cmd_question
+  Output: >
+    Run the following command to calculate the mean Regret Scale score from the 5 questions:
+    IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2,
+    IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
+  CorrectAnswer: IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
+  AnswerTests: omnitest(correctExpr = 'IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))')
+  Hint: >
+    Type out the following command and paste it into the console:
+    IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2,
+    IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
+  
+- Class: cmd_question
+  Output: >
+    Now re-run names() on the IntroSurvey dataframe to check that the new variable is there.
+    regret_total should show up in the names.
+  CorrectAnswer: names(IntroSurvey)
+  AnswerTests: omnitest(correctExpr = 'names(IntroSurvey)'); 'regret_total' %in% names(IntroSurvey)
+  Hint: >
+    Type out the following command and paste it into the console: names(IntroSurvey)
+  
+- Class: exact_question
+  Output: What is the mean regret score for the class?
+  CorrectAnswer: mean(IntroSurvey$regret_total)
+  AnswerTests: val_rounded_equals(4.6, digits = 1)
+  Hint: Call mean() on the new regret_total column.
+  
+- Class: exact_question
+  Output: What is the mean regret score for students in Columbia College?
+  CorrectAnswer: mean(IntroSurvey$regret_total[IntroSurvey$CC == "CC"])
+  AnswerTests: val_rounded_equals(4.8, digits = 1)
+  Hint: >
+    Call mean() on the appropriate subset of the regret_total column using hard-bracket
+    indexing with a logical statement inside.
+
+
+
+In this document, we will be modeling a specific order of R tasks:
+
+1. Load your raw data
+2. Prepare your data for analysis
+3. Generate descriptive statistics
+4. Generate inferential statistics
+5. Generate graphs
+
+This is important because R documents execute their code **in order** from **beginning to end,** or **from top to bottom.** All the code at the end of the document _assumes_ that code at the beginning of the document has _already been run._ For example, if you want to run a t-test on a particular mean questionnaire score that you must calculate from your raw data, the code to calculate that mean score needs to come _before_ the code that runs the t-test.
+
+# Loading raw data into R
+
+The _first_ thing you do in any data analysis document is to load your fresh raw data into R so you can later work with and calculate statistics on your data.
+
+## 1.
 
 Check your working directory using `getwd()`. If you opened RStudio via the R project file in the same directory that contains your datafile (`classdata_2018.csv`) and your R scripts, you should be in that folder now.
 
@@ -95,16 +163,16 @@ Check your working directory using `getwd()`. If you opened RStudio via the R pr
 
 ```
 
-# 2.
+## 2.
 
-Read in your data file using `read.csv("classdata_2018.csv")`, and assign it to the dataframe name `IntroSurvey`.
+Read in your data file using `read_csv("classdata_2018.csv")`, and assign it to the dataframe name `IntroSurvey` using the `<-` left-arrow operator.
 
 ```{r}
 # Code goes here
 
 ```
 
-# 3.
+## 3.
 
 Use the following exploration functions to check that the dataframe `IntroSurvey` read in correctly:
 
@@ -129,28 +197,30 @@ Use the following exploration functions to check that the dataframe `IntroSurvey
 
 ```
 
-# 4.
+# Cleaning and manipulating your data
 
-Calculating variables from the Regret and Maximization scales:
+Before we calculate any statistics on our data, we may need to clean the raw data, or calculate additional values of interest in our data. It is important to do this before calculating any statistics, so that any values you may need for your statistics are already present in your data by the time you run your "analysis" code.
 
-Run the code below to create a new variable for overall Regret Score per the Regret Scale in the `IntroSurvey` dataframe called `regret_total`. (This is the same `regret_total` that we calculated at the end of Assignment 1.)
+## 4. Calculating overall scores for the Regret and Maximization scales
 
-```{r}
-IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1,
-                                           IntroSurvey$regret2,
-                                           IntroSurvey$regret3,
-                                           IntroSurvey$regret4,
-                                           IntroSurvey$regret5))
+First, we will show you how to create new columns in your data.
+
+The code below will calculate two new columns based on existing raw data in `IntroSurvey`:
+
+* `regret_total`, for overall Regret Score on the Regret Scale, by averaging all 5 individual regret scores, `regret1` to `regret5`
+* `maxi_total`, for overall Maximizing score on the Maximizing Scale, by averaging all 6 individual regret scores, `maxi1` to `maxi6`
+
+```{r TEACH ME mutate}
+IntroSurvey <- mutate(IntroSurvey,
+                      regret_total = (regret1 + regret2 + regret3 + regret4 + regret5) / 5,
+                      maxi_total = (maxi1 + maxi2 + maxi3 + maxi4 + maxi5 + maxi6) / 6)
 ```
 
-You'll take a similar approach to calculating an overall Maximizing score from the six items we took from the short version of the Maximizing Scale. They are called `maxi1`, `maxi2`, `maxi3`, etc.
+You will be using the function `mutate()` that you see above to **add new columns to a dataframe,** or **overwrite existing columns in a dataframe.** Anytime you want to calculate a new column that may be some combination of existing columns, like averaging the values across multiple columns, `mutate()` is the function you want.
 
-First, assign a new variable called `maxi_total` that is the average of all six `maxi` scores (if you need help, see the code above for calculating the mean regret score).
+You can create as many new columns as you want inside of one `mutate()` command, as long as you separate each row of column-creating code with a comma. To help your code look more readable, press Enter after the comma at the end of each row of column-creating code, to actually get each row of code on its own row.
 
-```{r}
-# Code goes here
-
-```
+Now, it's your turn to calculate some new columns of data.
 
 The Maximizing Scale has been shown to divide up into three subscales:
 
@@ -158,14 +228,14 @@ The Maximizing Scale has been shown to divide up into three subscales:
 * Decision Difficulty (`maxi2` & `maxi5`)
 * High Standards (`maxi4` & `maxi6`)
 
-Please assign three new variables in the `IntroSurvey` dataframe, each of which represents one subscale: `maxi_as`, `maxi_dd`, and `maxi_hs`. (Hint: you should be averaging the two scores for each.)
+Please use the approach seen above to assign three new variables in the `IntroSurvey` dataframe, each of which represents one subscale: `maxi_as`, `maxi_dd`, and `maxi_hs`. (Hint: you should be averaging the two `maxi` scores for each.)
 
 ```{r}
 # Code goes here
 
 ```
 
-# 5.
+## 5. Checking to make sure your manipulation code worked
 
 Use `head()` to check that the following new variables are present in `IntroSurvey`:
 
@@ -178,18 +248,32 @@ Use `head()` to check that the following new variables are present in `IntroSurv
 
 ```
 
-# 6.
+
+# Calculating descriptive statistics
+
+## 6.
+
+### a. Calculate means/SDs using summarize()
 
 Now we can start doing some real data analysis! For the purposes of getting practice in a variety of inferential statistics in R, we'll be running more exploratory tests than would normally be considered wise for a real study. We'll talk more about why this is a problem later in the semester, but hopefully in your stats class you talked about the dangers of running too many tests--i.e., alpha-inflation.
 
-Let's start with some simple descriptive statistics on our new variables. Use `mean()` and `sd()` to find the mean and standard deviations for:
+Let's start with some descriptive summary statistics on our new variables.
 
-total regret score
+To calculate multiple summary statistics on one dataframe at once, we will use `summarize()`. As an example, first let's calculate both the mean and standard devation of the total regret score across all subjects.
 
-```{r}
-# Code goes here
+```{r TEACH ME summarize}
+# First, create a summary dataframe to hold the relevant info
+regret_total_summary <- summarize(IntroSurvey,
+                                  mean_regret_total = mean(regret_total, na.rm = TRUE),
+                                  sd_regret_total = sd(regret_total, na.rm = TRUE))
 
+# Then print the dataframe to show the summary values inside
+regret_total_summary
 ```
+
+The syntax you use to calculate summary stats with `summarize()` is similar to the syntax you use to create new columns with `mutate()` like we did earlier. You can calculate multiple summary stats in the same `summarize()` command as long as you separate every new stat you want to calculate with a comma.
+
+Use `mean()` and `sd()` inside of `summarize()` to find the mean and standard deviations for:
 
 total maximizing score
 
@@ -198,31 +282,24 @@ total maximizing score
 
 ```
 
-each of the 3 maxi subscales. 
+each of the 3 maxi subscales (You can do this all inside of one `summarize()` call) 
 
 ```{r}
 # Code goes here
 
 ```
 
-```{r}
-# Code goes here
+### b. Show quick histograms using hist()
 
+Next, we will use `hist()` to visualize the distribution of scores for continuous variables in our data. As a refresher, `hist()` works a little differently than most of the functions we will use in this assignment. In most of the functions we are using, **you already specify to the function that it should look inside `IntroSurvey`, so you do not need to use the `$` to tell R where to find the columns you're referring to.** However, `hist()` isn't that smart, so you will need to use the `$` to tell it to generate a histogram of a specific column inside of a larger dataframe in your environment.
+
+As an example, we will first generate a histogram of the distribution of total regret scores over all students in the data.
+
+```{r TEACH ME hist}
+hist(IntroSurvey$regret_total)
 ```
 
-```{r}
-# Code goes here
-
-```
-
-Use `hist()` to visualize the range of scores for each of the variables you just calculated the mean and standard deviation for:
-
-total regret score
-
-```{r}
-# Code goes here
-
-```
+Now, on your own, use `hist()` like we did above to generate histograms for the columns that you just calculated the mean and standard deviation for in question 6a:
 
 total maximizing score
 
@@ -231,30 +308,40 @@ total maximizing score
 
 ```
 
-each of the 3 maxi subscales
+each of the 3 maxi subscales:
+
+Alternative Search
 
 ```{r}
 # Code goes here
 
 ```
 
-```{r}
-# Code goes here
-
-```
+Decision Difficulty
 
 ```{r}
 # Code goes here
 
 ```
 
-Use `summary()` to get a summary of some of our _categorical_ variables (variables that are not numeric, but rather can take on one of a few specified categories):
-
-`class`
+High Standards
 
 ```{r}
 # Code goes here
 
+```
+
+### c. Count categorical values using count()
+
+Histograms are a fantastic way to visualize a summary of continuous, numeric variables. However, not all data are numeric--sometimes variables of interest are _categorical_, where each observation is one of a few specified levels.
+
+We can use the function `count()` to see how many observations occur at each level of a categorical variable. For example, let's use `count()` to count how many values are in each level of the column `class`. This will tell us how many participants are in each class year in our `IntroSurvey` data.
+
+```{r TEACH ME count}
+count_class <- count(IntroSurvey,
+                     class)
+
+count_class
 ```
 
 `school`
@@ -271,7 +358,14 @@ Use `summary()` to get a summary of some of our _categorical_ variables (variabl
 
 ```
 
-Explore at least **5** other variables that you think might have a relationship with maximizing and/or regret. If the variable is _numeric_ or _interval_ (i.e., if its responses are numbers), compute the mean and sd, and produce a histogram. If the variable is _categorical_, produce a summary.
+
+### d.
+
+Explore at least **3** other variables that you think might have a relationship with maximizing and/or regret.
+
+If the variable is _numeric_ or _interval_ (i.e., if its responses are numbers), use `summarize()` with `mean()` and `sd()` to compute the mean and standard deviation, and use `hist()` to produce a histogram.
+
+If the variable is _categorical_, use `count()` to count the values in each level of the variable.
 
 ```{r}
 # Code goes here
@@ -288,21 +382,84 @@ Explore at least **5** other variables that you think might have a relationship 
 
 ```
 
+## 7. Calculating summary statistics for different groups
+
+Many times, when investigating summary statistics to learn more about your data, you will want to compare values for different study groups in your participant population, in addition to reporting data across all subjects as we just learned how to do.
+
+Here, we will learn about some functions that will help you break up your summaries by participant groups.
+
+### a. Using filter() to choose subsets of rows of data
+
+First, you can use the `filter()` function to choose a subset of rows out of your data, so you can produce summaries on one group at a time.
+
+```{r TEACH ME filter}
+righties <- filter(IntroSurvey,
+                   handed == "R")
+```
+
+Inside of `filter()`, you use logical statements based on columns of your data to choose which rows to subset. If you use multiple logical statements in the same `filter()` command, separated with commas, you will choose the _intersection_ of all those logical statements, or all the rows where the first statement _and_ the second statement _and_ the third statement etc. are true.
+
+Below, use `filter()` to choose the subset of your data belonging to Columbia College-affiliated right-handed students. You can use the code above to help you, but this time, you will need _two_ logical statements inside of `filter()`.
+
 ```{r}
 # Code goes here
 
 ```
 
+Sometimes, you may want to choose just a subset of your data to operate on, but other times, you may want to calculate all summary statistics for different groups in your data at once, so you can compare them. We will learn how to do this next.
+
+### b. using group_by() and summarize() to generate summary statistics for all groups at once
+
+Remember the `summarize()` function from before? Previously, we used it to calculate summary statistics over all observations in our data. We can also use `summarize()` to calculate statistics separately for different groups in our data. In order to do this, we must tell R what groups are in our data, using a new function, `group_by()`. Then, `summarize()` will automatically calculate summary statistics separately for every group it sees in the data.
+
+Here's an example: Let's calculate the mean and SD of students' total regret scores, like we did in question 6a. This time, however, we will calculate it separately for students of every class year.
+
+```{r TEACH ME group by summarize}
+# First, create a summary dataframe to hold the relevant info
+regret_total_by_class_summary <- IntroSurvey %>%
+  group_by(class) %>%
+  summarize(mean_regret_total = mean(regret_total, na.rm = TRUE),
+            sd_regret_total = sd(regret_total, na.rm = TRUE))
+
+# Then print the dataframe to show the summary values inside
+regret_total_by_class_summary
+```
+
+If you run the code above, you'll see that you get columns for mean regret score and SD of regret score, but now instead of one summary value for all subjects, there's a separate value for each level of `class`, corresponding to each unique class year reported in the data.
+
+There is also a new command used in the code above: the pipe operator, `%>%`. The `%>%` operator does one simple, but **key,** thing: takes the object on the left-hand side and feeds it into the first argument of the function on the right-hand side.
+
+This means that you can put multiple functions together, one after the other, and R will understand and execute them in _left to right, like natural English._ In the code above, this means that we are telling R to do these things in this order:
+
+1. Take the `IntroSurvey` data object
+2. Use `group_by()` on `IntroSurvey` to tell R to group the rows of `IntroSurvey` by the `class` column
+3. Use `summarize()` on the grouped `IntroSurvey` data, calculating a mean and SD of `regret_total`
+
+It's **very important** here that `group_by()` is called _before_ `summarize()`, because otherwise R wouldn't know how to group the data before summarizing it.
+
+We will practice this a couple times.
+
+Below, group `IntroSurvey` by school affiliation (CC, Barnard, GS, etc), and then calculate mean and SD of total regret score for each school group in the data.
+
 ```{r}
 # Code goes here
 
 ```
 
-# 7.
+Below, group `IntroSurvey` by major affiliation, and then calculate mean and SD of total maximizing score for each major in the data.
+
+```{r}
+# Code goes here
+
+```
+
+# Calculating inferential statistics
+
+## 7. Correlations
 
 Now that you have a sense for what the data show, let's look at how some of the variables relate to each other. First, some correlations.
 
-## a.
+### a.
 
 Let's see if age correlates with birthyear (it should!). The function `cor.test()` allows us to put in two variables, see what their correlation is, and return a p-value for that correlation.
 
@@ -334,7 +491,7 @@ Now, we can use these variable names to refer to the Pearson's r and p-value of 
 
 PS: In RStudio, if you want to know all the sub-variables inside of an object, if you just type the name of the object with a `$` after it, an auto-complete menu should pop up and you can use the up and down arrow keys to look through all the possible sub-variables.
 
-## b.
+### b.
 
 Let's see if maximizing correlates with regret. Use `cor.test()` on those two variables, and report the Pearson's r and p-value.
 
@@ -355,7 +512,7 @@ Let's see if maximizing correlates with regret. Use `cor.test()` on those two va
 
 Typically, maximizing correlates reasonably strongly with regret (r ~ 0.4). Does this appear to be the case in our dataset? 
 
-## c.
+### c.
 
 Let's see if maximizing correlates with various measures of course-selection behavior. Calculate the correlation and report the Pearson's r between `maxi_total` and each of the following variables:
 
@@ -380,7 +537,7 @@ Let's see if maximizing correlates with various measures of course-selection beh
 
 ```
 
-## d.
+### d.
 
 Is the regret score (`regret_total`), as calculated by the Regret Scale, correlated with either of our students' self-reports of regret:
 
@@ -405,7 +562,7 @@ What about `regret_general`?
 
 ```
 
-## e.
+### e.
 
 Is the score on the Maximizing Scale (`maxi_total`) related to the self-report of tendency to maximize (`maxi_general`)?
 
@@ -414,13 +571,13 @@ Is the score on the Maximizing Scale (`maxi_total`) related to the self-report o
 
 ```
 
-# 8. T-tests
+## 8. T-tests
 
 We use t-tests to determine if two samples likely come from different populations. Of course, means will always differ somewhat, even if two samples are drawn from the same population. When the t-value is high enough, we conclude that it's unlikely that the two samples actually represent the same population.
 
 The R syntax for a Student's t-test is `t.test(dv ~ iv, data = DataFrame)`. Note that because we're defining the dataframe (for today's assignment, IntroSurvey) within the test, we don't need to dollar-sign index it in the names of the DV and IV variables. We can just use the variable name on its own (for example, inside this function, if age were our DV, we only need to call `age`, not `IntroSurvey$age`, because `t.test()` already knows to look inside of `IntroSurvey`.)
 
-## a. 
+### a. 
 
 Let's start by seeing if our subjects show a difference in age based on handedness. (They shouldn't!)
 
@@ -446,18 +603,19 @@ t_age_handed$statistic
 t_age_handed$p.value
 ```
 
-## b.
+### b.
 
 Next, you'll create and inspect your own t-test objects. This time, let's test for differences in scores by school affiliation (Columbia College/Barnard vs GS/SPS, for example).
 
 Because we need a binary variable in order to run a t-test, here's some code to re-code school affiliation into a binary variable.
 
-To do this, we'll use the `ifelse()` function. The code below tells R to create a new variable (`school_binary`) whose value is `"B_CC"` _if_ the original variable (`school`) was either Barnard or CC, and whose value is `"GS_SPS"` _otherwise._
+To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in our data, like we did earlier. The code below tells R to create a new variable (`school_binary`) whose value is `"B_CC"` _if_ the original variable (`school`) was either Barnard or CC, and whose value is `"GS_SPS"` _otherwise._
 
 ```{r}
-IntroSurvey$school_binary <- ifelse(IntroSurvey$school %in% c("Barnard", "CC"),
-                                    "B_CC",
-                                    "GS_SPS")
+IntroSurvey <- mutate(IntroSurvey,
+                      school_binary = ifelse(school %in% c("Barnard", "CC"),
+                                             "B_CC",
+                                             "GS_SPS"))
 ```
 
 Does regret score differ by school affiliation?
@@ -467,7 +625,7 @@ Does regret score differ by school affiliation?
 
 ```
 
-## c.
+### c.
 
 Does tendency to maximize differ by school affiliation?
 
@@ -476,18 +634,17 @@ Does tendency to maximize differ by school affiliation?
 
 ```
 
-## d.
+### d.
 
 It might be reasonable to expect that people who made their course decisions using a calculation-based mode are more likely to be maximizers than those who used an affect- or rule-based mode. So we should see if there's any difference in maximizing between those who used calculation-based modes and those who didn't.
 
-The question about decision mode allowed for 4 options (calculation, rule, role, and affect). To do a t-test, we need the variable **re-coded** as calculation vs. not-calculation. To do this, we'll use the `ifelse()` function again. The code below tells R to create a new variable (`dec_mode_2`) whose value is `"calc"` _if_ the original variable (`dec_mode`) was calculation-based, and whose value is `"not-calc"` _otherwise._
- 
-Note: Check that the levels of `IntroSurvey$dec_mode` are still correct for your dataset using `summary()`.
+The question about decision mode allowed for 4 options (calculation, rule, role, and affect). To do a t-test, we need the variable **re-coded** as calculation vs. not-calculation. To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in the data again. The code below tells R to create a new variable (`dec_mode_2`) whose value is `"calc"` _if_ the original variable (`dec_mode`) was calculation-based, and whose value is `"not-calc"` _otherwise._
 
 ```{r}
-IntroSurvey$dec_mode_2 <- ifelse(IntroSurvey$dec_mode == "calculation-based decision mode (e.g., weighing pros and cons of each course against one another)",
-                         "calc",
-                         "not-calc")
+IntroSurvey <- mutate(IntroSurvey,
+                      dec_mode_2 = ifelse(startsWith(dec_mode, "calculation-based"),
+                                          "calc",
+                                          "not-calc"))
 ```
 
 Now you can run a t-test just like above, with `dec_mode_2` as the IV and maximizing as the DV.
@@ -497,7 +654,10 @@ Now you can run a t-test just like above, with `dec_mode_2` as the IV and maximi
 
 ```
 
-# 9. Graphing
+
+# Graphing data
+
+## 9.
 
 Time to graph some results! `ggplot2` is a package that helps you make prettier figures in R, using more straightforward syntax. We'll use `ggplot2` to make a scatterplot and a bar graph, but first let's get oriented with how it works.
 
@@ -560,7 +720,7 @@ ggplot(IntroSurvey, aes(x = maxi_total, y = regret_total)) +
   bwtheme
 ```
 
-# 10.
+## 10.
 
 Create one more figure that shows the relationship between two _continuous_ variables (or any variables that _aren't categorical_). Make sure your figure has a title, and change the labels on each axis so that someone not familiar with our variable names would understand what the figure represents. 
 You can copy and paste code from the previous sections, above, but remember to change the variable names as needed.
@@ -570,7 +730,7 @@ You can copy and paste code from the previous sections, above, but remember to c
 
 ```
 
-# 11.
+## 11.
 
 Now let's make a box plot, which is a clean way to illustrate the centers and spreads of multiple categories (e.g., the two groups you're comparing with a t-test) . We'll graph this in the same way as we made the scatter plot, but this time instead of using `geom_point()` to create a scatter plot we'll use `geom_boxplot()` to generate a box plot.
 
@@ -629,6 +789,6 @@ Now, please create one new box plot that shows any of our continuous DVs as a fu
 
 # Submitting this assignment
 
-When saving an R Markdown, you can either save it as a text-based file so you can keep editing it and running the code inside later, or you can export it as a final document that anyone can read without opening RStudio. Exporting an R Markdown is called "knitting." To knit your file, click the "Knit" button at the top of your Editor pane, and click "Knit to HTML." Once the HTML document finishes exporting, it should save into the same directory as your original R Markdown file. Rename this HTML document with a **new filename** that _includes your own name,_ e.g. R_Project_2_Jonathan_Nicholas.html or R_Project_2_Maneeza_Dawood.html .
+When saving an R Markdown, you can either save it as a text-based file so you can keep editing it and running the code inside later, or you can export it as a final document that anyone can read without opening RStudio. Exporting an R Markdown is called "knitting." To knit your file, click the "Knit" button at the top of your Editor pane, and click "Knit to HTML." Once the HTML document finishes exporting, it should save into the same directory as your original R Markdown file. Rename this HTML document with a **new filename** that _includes your own name,_ e.g. R_Project_2_Monica_Thieu.html or R_Project_2_Paul_Bloom.html .
 
 To get credit for this assignment, upload your completed "knitted" HTML to the Assignments section of Canvas for UN1490.
