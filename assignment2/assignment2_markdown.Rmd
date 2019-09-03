@@ -674,7 +674,6 @@ Now, please run a t-test just like above, with `dec_mode_binary` as the IV and t
 
 ```
 
-
 # Graphing data
 
 ## 9.
