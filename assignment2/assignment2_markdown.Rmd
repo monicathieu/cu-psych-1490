@@ -201,7 +201,9 @@ Use the following exploration functions to check that the dataframe `IntroSurvey
 
 Before we calculate any statistics on our data, we may need to clean the raw data, or calculate additional values of interest in our data. It is important to do this before calculating any statistics, so that any values you may need for your statistics are already present in your data by the time you run your "analysis" code.
 
-## 4. Calculating overall scores for the Regret and Maximization scales
+## 4. Generating new columns of data
+
+### a. Continuous variables: calculating overall scores for Regret and Maximization scales
 
 First, we will show you how to create new columns in your data.
 
@@ -234,6 +236,40 @@ Please use the approach seen above to assign three new variables in the `IntroSu
 # Code goes here
 
 ```
+
+### c. Categorical variables: recoding decision mode and school affiliation
+
+Above, we used `mutate()` to create new **continuous** variables by averaging the values of other continuous variables together. We can also create new **categorical** variables by recoding the values of existing categorical variables into levels that are more convenient for the statistics we want to calculate.
+
+The question about decision mode allowed for 4 options (calculation, rule, role, and affect). To do a t-test, we need the variable **re-coded** as binary, with two levels: calculation vs. not-calculation. To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in the data again. The code below tells R to create a new variable (`dec_mode_binary`) whose value is `"calc"` _if_ the original variable (`dec_mode`) started with the phrase  "calculation-based", and whose value is `"not-calc"` _otherwise._
+
+```{r TEACH ME ifelse 1}
+IntroSurvey <- mutate(IntroSurvey,
+                      dec_mode_binary = ifelse(startsWith(dec_mode, "calculation-based"),
+                                          "calc",
+                                          "not-calc"))
+```
+
+There are various strategies you can use to recode the levels of categorical variables. Above, we used a logical test to create a binary variable based on whether the logical test returned true or false. Creating binary variables is very useful for setting up t-tests, because t-tests require you to split your data up into two groups for comparison.
+
+Next, let's create another new binary variable. This time, we will re-code school affiliation into a binary variable Later, we can use this to test for differences in scores by school affiliation (Columbia College/Barnard vs GS/SPS, for example).
+
+To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in our data, like we did earlier. The code below tells R to create a new variable (`school_binary`) whose value is `"B_CC"` _if_ the original variable (`school`) was _either_ Barnard or CC, and whose value is `"GS_SPS"` _otherwise._
+
+```{r TEACH ME ifelse 2}
+IntroSurvey <- mutate(IntroSurvey,
+                      school_binary = ifelse(school %in% c("Barnard", "CC"),
+                                             "B_CC",
+                                             "GS_SPS"))
+```
+
+Now it's your turn. Use `mutate()` and `ifelse()` as we demonstrated above to create another binary variable based on handedness. Right now, handedness may have up to 3 levels: "R", "L", or "A" (for ambidextrous). Create a new binary variable called `handed_binary` with two levels: "R" and "notR", where anyone who is not right-handed has the value "notR".
+
+```{r}
+# Code goes here
+
+```
+
 
 ## 5. Checking to make sure your manipulation code worked
 
@@ -463,12 +499,14 @@ Now that you have a sense for what the data show, let's look at how some of the 
 
 Let's see if age correlates with birthyear (it should!). The function `cor.test()` allows us to put in two variables, see what their correlation is, and return a p-value for that correlation.
 
-`cor.test()` allows you to run a Pearson, Kendall, or Spearman correlation, depending on what you tell it to do using the argument `method`. This time, since we just want to do a Pearson correlation, we'll use `method = "pearson"`.
+The R syntax for a correlation is `cor.test(~ var1 + var2, data = DataFrame)`. Note that because we're defining the dataframe (for today's assignment, `IntroSurvey`) within the test, we don't need to dollar-sign index it in the names of the variables. We can just use the variable name on its own (for example, inside this function, if age were one of our variables, we only need to call `age`, not `IntroSurvey$age`, because `cor.test()` already knows to look inside of `IntroSurvey`.)
+
+`cor.test()` allows you to run a Pearson, Kendall, or Spearman correlation, depending on what you tell it to do using the argument `method`. This time, since we want to do a Pearson correlation, we'll use `method = "pearson"`.
 
 First, we'll save the contents of our correlation test into the variable `cor_age_birthyear` so we can access its contents later. Then, we'll print `cor_age_birthyear` to the console, so we can visually inspect the results of the correlation test.
 
-```{r}
-cor_age_birthyear <- cor.test(IntroSurvey$age, IntroSurvey$birthyear, method = "pearson")
+```{r TEACH ME cor.test}
+cor_age_birthyear <- cor.test(~ age + birthyear, method = "pearson", data = IntroSurvey)
 
 cor_age_birthyear
 ```
@@ -489,7 +527,7 @@ cor_age_birthyear$p.value
 
 Now, we can use these variable names to refer to the Pearson's r and p-value of this correlation test. You don't have to look at the numbers and copy them over!
 
-PS: In RStudio, if you want to know all the sub-variables inside of an object, if you just type the name of the object with a `$` after it, an auto-complete menu should pop up and you can use the up and down arrow keys to look through all the possible sub-variables.
+PS: In RStudio, if you want to know all the sub-variables inside of an object, if you type the name of the object with a `$` after it, an auto-complete menu should pop up and you can use the up and down arrow keys to look through all the possible sub-variables.
 
 ### b.
 
@@ -575,16 +613,16 @@ Is the score on the Maximizing Scale (`maxi_total`) related to the self-report o
 
 We use t-tests to determine if two samples likely come from different populations. Of course, means will always differ somewhat, even if two samples are drawn from the same population. When the t-value is high enough, we conclude that it's unlikely that the two samples actually represent the same population.
 
-The R syntax for a Student's t-test is `t.test(dv ~ iv, data = DataFrame)`. Note that because we're defining the dataframe (for today's assignment, IntroSurvey) within the test, we don't need to dollar-sign index it in the names of the DV and IV variables. We can just use the variable name on its own (for example, inside this function, if age were our DV, we only need to call `age`, not `IntroSurvey$age`, because `t.test()` already knows to look inside of `IntroSurvey`.)
+The R syntax for a Student's t-test is `t.test(dv ~ iv, data = DataFrame)`. Note that because we're defining the dataframe (for today's assignment, `IntroSurvey`) within the test, we don't need to dollar-sign index it in the names of the DV and IV variables. We can just use the variable name on its own (for example, inside this function, if age were our DV, we only need to call `age`, not `IntroSurvey$age`, because `t.test()` already knows to look inside of `IntroSurvey`.)
 
 ### a. 
 
 Let's start by seeing if our subjects show a difference in age based on handedness. (They shouldn't!)
 
-Note: t-tests can only be run on **two groups.** If there was someone ambidextrous in the dataset, we want to ignore their observations. We can do this by telling R to run on the dataset IntroSurvey, but omitting all rows belonging to people whose handedness is ambidextrous.
+Note: t-tests can only be run on **two groups.** Earlier in question 4c, we created a new binary handedness variable called `handed_binary` that we can now use to separate two groups for our t-test.
 
-```{r}
-t_age_handed <- t.test(age ~ handed, data = IntroSurvey[IntroSurvey$handed != "A", ])
+```{r TEACH ME t.test}
+t_age_handed <- t.test(age ~ handed_binary, data = IntroSurvey)
 
 t_age_handed
 ```
@@ -605,18 +643,7 @@ t_age_handed$p.value
 
 ### b.
 
-Next, you'll create and inspect your own t-test objects. This time, let's test for differences in scores by school affiliation (Columbia College/Barnard vs GS/SPS, for example).
-
-Because we need a binary variable in order to run a t-test, here's some code to re-code school affiliation into a binary variable.
-
-To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in our data, like we did earlier. The code below tells R to create a new variable (`school_binary`) whose value is `"B_CC"` _if_ the original variable (`school`) was either Barnard or CC, and whose value is `"GS_SPS"` _otherwise._
-
-```{r}
-IntroSurvey <- mutate(IntroSurvey,
-                      school_binary = ifelse(school %in% c("Barnard", "CC"),
-                                             "B_CC",
-                                             "GS_SPS"))
-```
+Next, you'll create and inspect your own t-test objects. This time, let's test for differences in scores by school affiliation (Columbia College/Barnard vs GS/SPS, for example). We will use the `school_binary` variable that we created earlier in question 4c. If you can't remember how this variable was created, refer back to the code in that question.
 
 Does regret score differ by school affiliation?
 
@@ -638,22 +665,14 @@ Does tendency to maximize differ by school affiliation?
 
 It might be reasonable to expect that people who made their course decisions using a calculation-based mode are more likely to be maximizers than those who used an affect- or rule-based mode. So we should see if there's any difference in maximizing between those who used calculation-based modes and those who didn't.
 
-The question about decision mode allowed for 4 options (calculation, rule, role, and affect). To do a t-test, we need the variable **re-coded** as calculation vs. not-calculation. To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in the data again. The code below tells R to create a new variable (`dec_mode_2`) whose value is `"calc"` _if_ the original variable (`dec_mode`) was calculation-based, and whose value is `"not-calc"` _otherwise._
+Remember, the original decision mode variable, `dec_mode` has 4 options (calculation, rule, role, and affect). To do a t-test, we need to use the binary-recoded version of this variable, `dec_mode_binary`. We created this variable earlier in question 4c, so if you can't remember how this variable was created, refer back to the code in that question.
 
-```{r}
-IntroSurvey <- mutate(IntroSurvey,
-                      dec_mode_2 = ifelse(startsWith(dec_mode, "calculation-based"),
-                                          "calc",
-                                          "not-calc"))
-```
-
-Now you can run a t-test just like above, with `dec_mode_2` as the IV and maximizing as the DV.
+Now, please run a t-test just like above, with `dec_mode_binary` as the IV and total maximizing score as the DV.
 
 ```{r}
 # Code goes here
 
 ```
-
 
 # Graphing data
 
@@ -669,7 +688,7 @@ We also loaded the `ggplot2` library, which allows us to quickly access all of i
 
 We'll create a theme called `bwtheme` (for black & white), which is nice and simple. We'll use some `ggplot2` functions to define this theme and save it into a variable. This way, you can create the theme variable once and then use it over and over on multiple graphs. Run the code below to save our theme into a variable:
 
-```{r}
+```{r RUN ME bwtheme}
 bwtheme <- theme_bw() + 
   theme(strip.background = element_rect(fill = 'white')) +
   theme(plot.title = element_text(size = rel(1))) + 
@@ -688,7 +707,7 @@ It's best practice to add a new line after each separate layer of your plotting 
 
 For example, to plot a scatterplot of `age` and `birthyear`, you would use:
 
-```{r}
+```{r TEACH ME ggplot 1}
 ggplot(IntroSurvey, aes(x = birthyear, y = age)) +
   geom_point(shape = 1) +
   bwtheme
@@ -696,20 +715,20 @@ ggplot(IntroSurvey, aes(x = birthyear, y = age)) +
 
 The `ggplot()` command defines the dataframe (`IntroSurvey`) and the "aesthetics" (the x and y variables you want to use). The `geom_point()` command tells `ggplot2` you want to graph points (aka a scatter plot). `shape = 1` tells `ggplot2` to use open circles for each point. `ggplot2` supports several different point shapes in scatter plots, each labeled by a different number. You can experiment with different shapes by changing the number, if you'd like.
 
-One useful thing to add to a scatterplot is a linear regression line. (The correlation between x and y is the same as a linear regression with only one predictor variable.) We'll do this with `geom_smooth()`.
+One useful thing to add to a scatterplot is a linear regression line. (A correlation between x and y is the same as a linear regression with only one predictor variable.) We'll do this with `geom_smooth()`.
 
-```{r}
+```{r TEACH ME ggplot 2}
 ggplot(IntroSurvey, aes(x = birthyear, y = age)) +
   geom_point(shape = 1) +
   geom_smooth(method = lm) +
   bwtheme
 ```
 
-By default, `geom_smooth()` will graph the 95% confidence interval (CI) for your regression line. If you want to omit that line, set the `se` argument of `geom_smooth()` to be `FALSE` to turn the estimated standard error off, like this: `geom_smooth(method = lm, se = FALSE)`
+By default, `geom_smooth()` will graph the 95% confidence interval (CI) for your regression line. If you want to omit that line, set the `se` argument (stands for "standard error") of `geom_smooth()` to be `FALSE` to turn the estimated standard error off, like this: `geom_smooth(method = lm, se = FALSE)`
 
 Earlier, you found the correlation between regret and maximizing. Let's graph that now. This time, we'll add a title by adding an additional layer in our `ggplot` call, and we'll also edit the x and y axis labels so that they're a little more informative than our shorthand variable names.
 
-```{r}
+```{r TEACH ME ggplot 3}
 ggplot(IntroSurvey, aes(x = maxi_total, y = regret_total)) +
   geom_point(shape = 1) +
   geom_smooth(method = lm) +
@@ -734,7 +753,7 @@ You can copy and paste code from the previous sections, above, but remember to c
 
 Now let's make a box plot, which is a clean way to illustrate the centers and spreads of multiple categories (e.g., the two groups you're comparing with a t-test) . We'll graph this in the same way as we made the scatter plot, but this time instead of using `geom_point()` to create a scatter plot we'll use `geom_boxplot()` to generate a box plot.
 
-```{r}
+```{r TEACH ME ggplot 4}
 ggplot(IntroSurvey, aes(x = handed, y = age)) +
   geom_boxplot() +
   bwtheme  
@@ -744,7 +763,7 @@ ggplot(IntroSurvey, aes(x = handed, y = age)) +
 
 If you want to add the points over the boxplots (a good habit, so that your reader can see where the individual values fall, in addition to the summary statistics), you can easily do this by adding another layer on top of `geom_boxplot()` using something like `geom_point(size = 3, alpha = .5)`. The alpha value is opacity (transparency), where larger fractions (closer to 1) are more opaque and lower fractions (closer to 0) are more transparent.
 
-```{r}
+```{r TEACH ME ggplot 5}
 ggplot(IntroSurvey, aes(x = handed, y = age)) +
   geom_boxplot() +
   geom_point(size = 3, alpha = .3) +
@@ -753,7 +772,7 @@ ggplot(IntroSurvey, aes(x = handed, y = age)) +
 
 If you want to change the order of the x-axis labels, or change their text, you can change these with various arguments within `scale_x_discrete()`. There are several functions you can use to modify the behavior of x-axes and y-axes. In this case, because the x variable is categorical, `scale_x_discrete()` is the appropriate function to use.
 
-```{r}
+```{r TEACH ME ggplot 6}
 ggplot(IntroSurvey, aes(x=handed, y=age)) +
   geom_boxplot() +
   geom_point(size = 3, alpha = .3) +
@@ -770,7 +789,7 @@ Below, the `geom_point()` line has been commented out so it won't run. R will sk
 
 Since both of these commands alter the way points are plotted by `ggplot2`, you should only use _one at a time._
 
-```{r}
+```{r TEACH ME ggplot 7}
 ggplot(IntroSurvey, aes(x=handed, y=age)) +
   geom_boxplot() +
   # geom_point(size = 3, alpha = .3) +
