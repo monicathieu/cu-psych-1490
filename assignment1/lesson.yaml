@@ -98,7 +98,7 @@
     
     the number of observations (rows) and number of variables (columns), if applicable
     
-    the name of each column and its class (interval, factor, numeric, etc.)
+    the name of each column and its data type (numeric, character, etc.)
     
     and for each column, a list of all unique values
 
@@ -177,8 +177,8 @@
 - Class: mult_question
   Output: Does head() tell you the data types of the columns in a dataframe?
   AnswerChoices: Yes; No
-  CorrectAnswer: No
-  AnswerTests: omnitest(correctVal = 'No')
+  CorrectAnswer: Yes
+  AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
   Output: Does head() tell you how many rows are in a dataframe?
@@ -332,15 +332,6 @@
   Hint: >
     Enter summary(IntroSurvey$...), where ... is the name of your numeric column in IntroSurvey,
     into the console and press Enter.
-
-- Class: cmd_question
-  Output: Call summary() on a FACTOR column in IntroSurvey and inspect the output.
-  CorrectAnswer: summary(IntroSurvey$age)
-  AnswerTests: expr_uses_func('summary'); result_has_type('integer')
-  Hint: >
-    Enter summary(IntroSurvey$...), where ... is the name of your factor column in IntroSurvey,
-    into the console and press Enter. If you are not sure which columns are factor type,
-    enter str(IntroSurvey) and inspect the output for columns that say "Factor".'
   
 - Class: text
   Output: Now, let's find specific descriptive statistics about specific columns in our data.
@@ -437,7 +428,7 @@
   Output: >
     For example, IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"] will index all
     the values of enrolled courses for female-identified students. Notice that for character
-    data, you need to have quotation marks around the data (e.g. "F") so that R knows that you're
+    data, you need to have quotation marks around the text (e.g. "F") so that R knows that you're
     referring to character data.
 
 - Class: cmd_question
@@ -484,18 +475,6 @@
   Hint: >
     You can re-enter the command from the previous question,
     or copy the number that was output by the previous command and paste it back into console.
-  
-- Class: cmd_question
-  Output: Enter a command that tells you how many participants are left-handed.
-  CorrectAnswer: summary(IntroSurvey$handed)
-  AnswerTests: any_of_exprs('summary(IntroSurvey$handed)', 'sum(IntroSurvey$handed == "L")')
-  Hint: Try using summary() to take a look at the handedness column.
-  
-- Class: exact_question
-  Output: How many participants are left-handed?
-  CorrectAnswer: 4
-  AnswerTests: omnitest(correctVal = 4)
-  Hint: Copy the correct number that was output by the previous command and paste it back into console.
   
 - Class: cmd_question
   Output: Enter a command to calculate the mean age of the juniors.
