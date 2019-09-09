@@ -70,15 +70,15 @@
 - Class: cmd_question
   Output: >
     Read this CSV data file into R by entering the following command:
-    IntroSurvey <- read_csv("classdata_2018.csv")
-  CorrectAnswer: IntroSurvey <- read_csv("classdata_2018.csv")
-  AnswerTests: omnitest(correctExpr = 'IntroSurvey <- read_csv("classdata_2018.csv")')
+    IntroSurvey <- read_csv("classdata_2019.csv")
+  CorrectAnswer: IntroSurvey <- read_csv("classdata_2019.csv")
+  AnswerTests: omnitest(correctExpr = 'IntroSurvey <- read_csv("classdata_2019.csv")')
   Hint: >
-    Type out the following command and press Enter to run: IntroSurvey <- read_csv("classdata_2018.csv")
+    Type out the following command and press Enter to run: IntroSurvey <- read_csv("classdata_2019.csv")
 
 - Class: text
   Output: >
-    We just read in the data saved in classdata_2018.csv, and used the left arrow <- to assign
+    We just read in the data saved in classdata_2019.csv, and used the left arrow <- to assign
     that data to the label IntroSurvey. R is case sensitive, so the label IntroSurvey is NOT
     the same as the label introsurvey. Our convention will be to label data frames with
     capital letters, and variables in lowercase.
@@ -141,13 +141,13 @@
   AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
-  Output: Does str() tell you the data types of the columns in a dataframe?
+  Output: Does str() tell you EXPLICITLY the data types of the columns in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
-  Output: Does str() tell you how many rows are in a dataframe?
+  Output: Does str() tell you EXPLICITLY how many rows are in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
@@ -177,19 +177,19 @@
   AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
-  Output: Does printing tell you the data types of the columns in a dataframe?
+  Output: Does printing tell you EXPLICITLY the data types of the columns in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
-  Output: Does head() tell you how many rows are in a dataframe?
+  Output: Does printing tell you EXPLICITLY how many rows are in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
 
 - Class: mult_question
-  Output: Does head() tell you EVERY entry in the first row of a dataframe?
+  Output: Does printing tell you EVERY entry in the first row of a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: No
   AnswerTests: omnitest(correctVal = 'No')
@@ -217,13 +217,13 @@
   AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
-  Output: Does summary() tell you the data types of the columns in a dataframe?
+  Output: Does summary() tell you EXPLICITLY the data types of the columns in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: No
   AnswerTests: omnitest(correctVal = 'No')
   
 - Class: mult_question
-  Output: Does summary() tell you how many rows are in a dataframe?
+  Output: Does summary() tell you EXPLICITLY how many rows are in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: No
   AnswerTests: omnitest(correctVal = 'No')
@@ -464,16 +464,16 @@
   
 - Class: cmd_question
   Output: Enter a command to calculate the mean number of psychology classes taken by our participants.
-  CorrectAnswer: mean(IntroSurvey$psych_courses, na.rm = TRUE)
-  AnswerTests: omnitest(correctExpr = 'mean(IntroSurvey$psych_courses, na.rm = TRUE)')
+  CorrectAnswer: mean(IntroSurvey$psych_courses)
+  AnswerTests: omnitest(correctExpr = 'mean(IntroSurvey$psych_courses)')
   Hint: >
     Index the psych_courses column of IntroSurvey, and feed it into mean().
     Be careful of missing data!
   
 - Class: exact_question
   Output: What is the mean number of psychology classes taken by our participants?
-  CorrectAnswer: 4.4
-  AnswerTests: val_rounded_equals(4.4, digits = 1)
+  CorrectAnswer: 4.9
+  AnswerTests: val_rounded_equals(4.9, digits = 1)
   Hint: >
     You can re-enter the command from the previous question,
     or copy the number that was output by the previous command and paste it back into console.
@@ -484,12 +484,12 @@
   AnswerTests: omnitest(correctExpr = 'mean(IntroSurvey$age[IntroSurvey$class == "Junior"])')
   Hint: >
     Index the age column of IntroSurvey, but use hard brackets to index only the ages
-    of juniors. Then feed that into mean().
+    of juniors. Then put that inside of mean() to calculate the mean of those ages.
   
 - Class: exact_question
   Output: What is the mean age of the juniors?
-  CorrectAnswer: 22.3
-  AnswerTests: val_rounded_equals(22.3, digits = 1)
+  CorrectAnswer: 20.8
+  AnswerTests: val_rounded_equals(20.8, digits = 1)
   Hint: >
     You can re-enter the command from the previous question,
     or copy the number that was output by the previous command and paste it back into console.
