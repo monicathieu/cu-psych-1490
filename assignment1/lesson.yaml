@@ -154,28 +154,30 @@
 
 - Class: text
   Output: >
-    The next exploring function you'll use is head(). head() prints out the first
-    few rows of a dataframe, so you can peek at what the data look like.
+    The next exploring function you'll use is not technically a separate function.
+    Another way to explore your dataframe is to print it out to console.
+    Typing the name of your dataframe "naked" and then pressing Enter prints out the
+    first 10 rows of a dataframe, so you can peek at what the data look like.
   
 - Class: cmd_question
   Output: >
-    Enter the following command and inspect the output: head(IntroSurvey)
-  CorrectAnswer: head(IntroSurvey)
-  AnswerTests: omnitest(correctExpr = 'head(IntroSurvey)')
+    Enter the following command and inspect the output: IntroSurvey
+  CorrectAnswer: IntroSurvey
+  AnswerTests: omnitest(correctExpr = 'IntroSurvey')
   Hint: >
-    Type out the following command and press Enter to run: head(IntroSurvey)
+    Type out the following command and press Enter to run: IntroSurvey
 
 - Class: text
-  Output: Now, here are some questions about what head() tells you.
+  Output: Now, here are some questions about what printing tells you.
 
 - Class: mult_question
-  Output: Does head() tell you the names of the columns in a dataframe?
+  Output: Does printing tell you the names of the columns in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
-  Output: Does head() tell you the data types of the columns in a dataframe?
+  Output: Does printing tell you the data types of the columns in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
@@ -183,14 +185,14 @@
 - Class: mult_question
   Output: Does head() tell you how many rows are in a dataframe?
   AnswerChoices: Yes; No
-  CorrectAnswer: No
-  AnswerTests: omnitest(correctVal = 'No')
-
-- Class: mult_question
-  Output: Does head() tell you every entry in the first row of a dataframe?
-  AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
+
+- Class: mult_question
+  Output: Does head() tell you EVERY entry in the first row of a dataframe?
+  AnswerChoices: Yes; No
+  CorrectAnswer: No
+  AnswerTests: omnitest(correctVal = 'No')
 
 - Class: text
   Output: >
