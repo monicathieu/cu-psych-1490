@@ -98,7 +98,7 @@
     
     the number of observations (rows) and number of variables (columns), if applicable
     
-    the name of each column and its class (interval, factor, numeric, etc.)
+    the name of each column and its data type (numeric, character, etc.)
     
     and for each column, a list of all unique values
 
@@ -154,43 +154,45 @@
 
 - Class: text
   Output: >
-    The next exploring function you'll use is head(). head() prints out the first
-    few rows of a dataframe, so you can peek at what the data look like.
+    The next exploring function you'll use is not technically a separate function.
+    Another way to explore your dataframe is to print it out to console.
+    Typing the name of your dataframe "naked" and then pressing Enter prints out the
+    first 10 rows of a dataframe, so you can peek at what the data look like.
   
 - Class: cmd_question
   Output: >
-    Enter the following command and inspect the output: head(IntroSurvey)
-  CorrectAnswer: head(IntroSurvey)
-  AnswerTests: omnitest(correctExpr = 'head(IntroSurvey)')
+    Enter the following command and inspect the output: IntroSurvey
+  CorrectAnswer: IntroSurvey
+  AnswerTests: omnitest(correctExpr = 'IntroSurvey')
   Hint: >
-    Type out the following command and press Enter to run: head(IntroSurvey)
+    Type out the following command and press Enter to run: IntroSurvey
 
 - Class: text
-  Output: Now, here are some questions about what head() tells you.
+  Output: Now, here are some questions about what printing tells you.
 
 - Class: mult_question
-  Output: Does head() tell you the names of the columns in a dataframe?
+  Output: Does printing tell you the names of the columns in a dataframe?
   AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
-  Output: Does head() tell you the data types of the columns in a dataframe?
+  Output: Does printing tell you the data types of the columns in a dataframe?
   AnswerChoices: Yes; No
-  CorrectAnswer: No
-  AnswerTests: omnitest(correctVal = 'No')
+  CorrectAnswer: Yes
+  AnswerTests: omnitest(correctVal = 'Yes')
   
 - Class: mult_question
   Output: Does head() tell you how many rows are in a dataframe?
   AnswerChoices: Yes; No
-  CorrectAnswer: No
-  AnswerTests: omnitest(correctVal = 'No')
-
-- Class: mult_question
-  Output: Does head() tell you every entry in the first row of a dataframe?
-  AnswerChoices: Yes; No
   CorrectAnswer: Yes
   AnswerTests: omnitest(correctVal = 'Yes')
+
+- Class: mult_question
+  Output: Does head() tell you EVERY entry in the first row of a dataframe?
+  AnswerChoices: Yes; No
+  CorrectAnswer: No
+  AnswerTests: omnitest(correctVal = 'No')
 
 - Class: text
   Output: >
@@ -332,15 +334,6 @@
   Hint: >
     Enter summary(IntroSurvey$...), where ... is the name of your numeric column in IntroSurvey,
     into the console and press Enter.
-
-- Class: cmd_question
-  Output: Call summary() on a FACTOR column in IntroSurvey and inspect the output.
-  CorrectAnswer: summary(IntroSurvey$age)
-  AnswerTests: expr_uses_func('summary'); result_has_type('integer')
-  Hint: >
-    Enter summary(IntroSurvey$...), where ... is the name of your factor column in IntroSurvey,
-    into the console and press Enter. If you are not sure which columns are factor type,
-    enter str(IntroSurvey) and inspect the output for columns that say "Factor".'
   
 - Class: text
   Output: Now, let's find specific descriptive statistics about specific columns in our data.
@@ -437,7 +430,7 @@
   Output: >
     For example, IntroSurvey$courses_enrolled[IntroSurvey$gender == "F"] will index all
     the values of enrolled courses for female-identified students. Notice that for character
-    data, you need to have quotation marks around the data (e.g. "F") so that R knows that you're
+    data, you need to have quotation marks around the text (e.g. "F") so that R knows that you're
     referring to character data.
 
 - Class: cmd_question
@@ -484,18 +477,6 @@
   Hint: >
     You can re-enter the command from the previous question,
     or copy the number that was output by the previous command and paste it back into console.
-  
-- Class: cmd_question
-  Output: Enter a command that tells you how many participants are left-handed.
-  CorrectAnswer: summary(IntroSurvey$handed)
-  AnswerTests: any_of_exprs('summary(IntroSurvey$handed)', 'sum(IntroSurvey$handed == "L")')
-  Hint: Try using summary() to take a look at the handedness column.
-  
-- Class: exact_question
-  Output: How many participants are left-handed?
-  CorrectAnswer: 4
-  AnswerTests: omnitest(correctVal = 4)
-  Hint: Copy the correct number that was output by the previous command and paste it back into console.
   
 - Class: cmd_question
   Output: Enter a command to calculate the mean age of the juniors.
