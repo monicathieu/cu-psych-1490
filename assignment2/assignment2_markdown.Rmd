@@ -156,7 +156,7 @@ The _first_ thing you do in any data analysis document is to load your fresh raw
 
 ## 1.
 
-Check your working directory using `getwd()`. If you opened RStudio via the R project file in the same directory that contains your datafile (`classdata_2018.csv`) and your R scripts, you should be in that folder now.
+Check your working directory using `getwd()`. If you opened RStudio via the R project file in the same directory that contains your datafile (`classdata_2019.csv`) and your R scripts, you should be in that folder now.
 
 ```{r}
 # Code goes here
@@ -165,7 +165,7 @@ Check your working directory using `getwd()`. If you opened RStudio via the R pr
 
 ## 2.
 
-Read in your data file using `read_csv("classdata_2018.csv")`, and assign it to the dataframe name `IntroSurvey` using the `<-` left-arrow operator.
+Read in your data file using `read_csv("classdata_2019.csv")`, and assign it to the dataframe name `IntroSurvey` using the `<-` left-arrow operator.
 
 ```{r}
 # Code goes here
