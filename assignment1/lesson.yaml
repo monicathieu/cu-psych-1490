@@ -157,7 +157,14 @@
     The next exploring function you'll use is not technically a separate function.
     Another way to explore your dataframe is to print it out to console.
     Typing the name of your dataframe "naked" and then pressing Enter prints out the
-    first 10 rows of a dataframe, so you can peek at what the data look like.
+    first 10 rows of a dataframe, so you can peek at what the data look like. You can
+    also see meta-information about:
+    
+    the number of observations (rows) and number of variables (columns)
+    
+    the name of each column and its data type (numeric, character, etc.)
+    
+    as well as the first 10 entries for the first several columns in the data.
   
 - Class: cmd_question
   Output: >
