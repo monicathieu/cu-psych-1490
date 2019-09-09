@@ -100,7 +100,7 @@
     
     the name of each column and its data type (numeric, character, etc.)
     
-    and for each column, a list of all unique values
+    and for each column, the first several values in that column
 
 - Class: cmd_question
   Output: >
