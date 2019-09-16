@@ -86,60 +86,6 @@ library(tidyverse)
 
 Now, we're ready to get started.
 
-TODO: INCORPORATE THIS that I removed from assignment 1:
-
-- Class: text
-  Output: >
-    For the last part of this assignment, we'll create new columns in our dataframe
-    for values calculated from existing columns. For example, you can use this to create
-    columns that contain row-wise means of other columns.
-  
-- Class: text
-  Output: >
-    In our dataframe, we will calculate each participant's score on the "Regret Scale"
-    (Schwartz et al., 2002) by averaging the scores on each of 5 different questions:
-    regret1, regret2, regret3, regret4, and regret5.
-  
-- Class: text
-  Output: 'We can use the function rowMeans() to calculate the mean value for every row of a dataframe. Then, we''ll assign the output of rowMeans() to a new column in IntroSurvey so we can keep everyone''s Regret Scale scores with all of their other data.'
-  
-- Class: cmd_question
-  Output: >
-    Run the following command to calculate the mean Regret Scale score from the 5 questions:
-    IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2,
-    IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
-  CorrectAnswer: IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
-  AnswerTests: omnitest(correctExpr = 'IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2, IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))')
-  Hint: >
-    Type out the following command and paste it into the console:
-    IntroSurvey$regret_total <- rowMeans(cbind(IntroSurvey$regret1, IntroSurvey$regret2,
-    IntroSurvey$regret3, IntroSurvey$regret4, IntroSurvey$regret5))
-  
-- Class: cmd_question
-  Output: >
-    Now re-run names() on the IntroSurvey dataframe to check that the new variable is there.
-    regret_total should show up in the names.
-  CorrectAnswer: names(IntroSurvey)
-  AnswerTests: omnitest(correctExpr = 'names(IntroSurvey)'); 'regret_total' %in% names(IntroSurvey)
-  Hint: >
-    Type out the following command and paste it into the console: names(IntroSurvey)
-  
-- Class: exact_question
-  Output: What is the mean regret score for the class?
-  CorrectAnswer: mean(IntroSurvey$regret_total)
-  AnswerTests: val_rounded_equals(4.6, digits = 1)
-  Hint: Call mean() on the new regret_total column.
-  
-- Class: exact_question
-  Output: What is the mean regret score for students in Columbia College?
-  CorrectAnswer: mean(IntroSurvey$regret_total[IntroSurvey$CC == "CC"])
-  AnswerTests: val_rounded_equals(4.8, digits = 1)
-  Hint: >
-    Call mean() on the appropriate subset of the regret_total column using hard-bracket
-    indexing with a logical statement inside.
-
-
-
 In this document, we will be modeling a specific order of R tasks:
 
 1. Load your raw data
@@ -210,7 +156,7 @@ First, we will show you how to create new columns in your data.
 The code below will calculate two new columns based on existing raw data in `IntroSurvey`:
 
 * `regret_total`, for overall Regret Score on the Regret Scale, by averaging all 5 individual regret scores, `regret1` to `regret5`
-* `maxi_total`, for overall Maximizing score on the Maximizing Scale, by averaging all 6 individual regret scores, `maxi1` to `maxi6`
+* `maxi_total`, for overall Maximizing score on the Maximizing Scale, by averaging all 6 individual maximizing scores, `maxi1` to `maxi6`
 
 ```{r TEACH ME mutate}
 IntroSurvey <- mutate(IntroSurvey,
@@ -252,7 +198,7 @@ IntroSurvey <- mutate(IntroSurvey,
 
 There are various strategies you can use to recode the levels of categorical variables. Above, we used a logical test to create a binary variable based on whether the logical test returned true or false. Creating binary variables is very useful for setting up t-tests, because t-tests require you to split your data up into two groups for comparison.
 
-Next, let's create another new binary variable. This time, we will re-code school affiliation into a binary variable Later, we can use this to test for differences in scores by school affiliation (Columbia College/Barnard vs GS/SPS, for example).
+Next, let's create another new binary variable. This time, we will re-code school affiliation into a binary variable. Later, we can use this to test for differences in scores by school affiliation (Columbia College/Barnard vs GS/SPS, for example).
 
 To do this, we'll use the `ifelse()` function with `mutate()` to generate a new column in our data, like we did earlier. The code below tells R to create a new variable (`school_binary`) whose value is `"B_CC"` _if_ the original variable (`school`) was _either_ Barnard or CC, and whose value is `"GS_SPS"` _otherwise._
 
