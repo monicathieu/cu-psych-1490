@@ -1,0 +1,224 @@
+---
+title: "Psych 1490, Assignment 3 (Analyses)"
+author: "YOUR NAME HERE!"
+date: "DATE OF SUBMISSION HERE!"
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(tidyverse)
+```
+
+
+# Loading raw data into R
+
+The _first_ thing you do in any data analysis document is to load your fresh raw data into R so you can later work with and calculate statistics on your data.
+
+Read in your data file using `read_csv("classdata_2019.csv")`, and assign it to the dataframe name `IntroSurvey` using the `<-` left-arrow operator.
+
+```{r}
+IntroSurvey <- read_csv("../classdata_2019.csv")
+```
+
+# Cleaning and manipulating your data
+
+Before we calculate any statistics on our data, we may need to clean the raw data, or calculate additional values of interest in our data. It is important to do this before calculating any statistics, so that any values you may need for your statistics are already present in your data by the time you run your "analysis" code.
+
+## Continuous variables: calculating overall scores for Regret and Maximization scales
+
+The code below will calculate new _continuous_ columns based on existing raw data in `IntroSurvey`:
+
+* `regret_total`, for overall Regret Score on the Regret Scale, by averaging all 5 individual regret scores, `regret1` to `regret5`
+* `maxi_total`, for overall Maximizing score on the Maximizing Scale, by averaging all 6 individual regret scores, `maxi1` to `maxi6`
+* `maxi_as`, for Maximizing Scale: Alternative Search subscale (`maxi1` & `maxi3`)
+* `maxi_dd`, for Maximizing Scale: Decision Difficulty subscale (`maxi2` & `maxi5`)
+* `maxi_hs`, for Maximizing Scale: High Standards subscale (`maxi4` & `maxi6`)
+
+**If you want to create any new columns of data, you can put them in the chunk below.**
+
+```{r TEACH ME mutate}
+IntroSurvey <- mutate(IntroSurvey,
+                      regret_total = (regret1 + regret2 + regret3 + regret4 + regret5) / 5,
+                      maxi_total = (maxi1 + maxi2 + maxi3 + maxi4 + maxi5 + maxi6) / 6,
+                      maxi_as = (maxi1 + maxi3) / 2,
+                      maxi_dd = (maxi2 + maxi5) / 2,
+                      maxi_hs = (maxi4 + maxi6) / 2)
+```
+
+## Categorical variables: recoding decision mode, school affiliation, and handedness as BINARY
+
+Above, we used `mutate()` to create new **continuous** variables by averaging the values of other continuous variables together. We can also create new **categorical** variables by recoding the values of existing categorical variables into levels that are more convenient for the statistics we want to calculate.
+
+The code below will calculate new _categorical_ columns based on existing raw data in `IntroSurvey`:
+
+* `dec_mode_binary`: a binary variable indicating whether participants reported using a "calculation-based" decision mode or not
+* `school_binary`: a binary variable indicating whether participants are CC/Barnard-affiliated (grouped together) or GS/SPS-affiliated (grouped together)
+* `handed_binary`: a binary variable indicating whether participants are right-handed vs. anything else
+
+```{r TEACH ME ifelse 1}
+IntroSurvey <- mutate(IntroSurvey,
+                      dec_mode_binary = ifelse(startsWith(dec_mode, "calculation-based"),
+                                          "calc",
+                                          "not-calc"),
+                      school_binary = ifelse(school %in% c("Barnard", "CC"),
+                                             "B_CC",
+                                             "GS_SPS"),
+                      handed_binary = ifelse(handed == "R",
+                                             "R",
+                                             "notR"))
+```
+
+# Calculating descriptive statistics about the participant population
+
+The following code will generate summary statistics about the entire participant population who filled out the Intro Survey. You will need to report these in your Methods section of Assignment 3.
+
+## Mean, SD, and # no-responses of reported age
+
+```{r TEACH ME summarize}
+# First, create a summary dataframe to hold the relevant info
+age_summary <- summarize(IntroSurvey,
+                         mean_age = mean(age, na.rm = TRUE),
+                         sd_age = sd(age, na.rm = TRUE),
+                         no_responses_age = sum(is.na(age)))
+
+# Then print the dataframe to show the summary values inside
+age_summary
+```
+
+## Counts of reported gender
+
+```{r TEACH ME count}
+gender_count <- count(IntroSurvey,
+                     gender)
+
+gender_count
+```
+
+# Calculating & reporting inferential statistics
+
+## Correlation
+
+Here is example code for you to use to generate all the statistics you need to report a Pearson correlation for Assignment 3. The example code is written to correlate **age** and **birth year** across all participants. This is not a truly meaningful correlation, so you need to change the variables in the code below to variables you want to calculate a correlation for.
+
+In APA format, when reporting the results of a statistical test, you must first report some descriptive statistics about the variables going into the test. When reporting a Pearson correlation, you must first report the mean and standard deviation of both of the variables going into the correlation.
+
+Use the code below, featuring the function `summarize()`, to calculate these descriptive statistics. **Change the variables** `age` and `birthyear` to whatever two variables you want to run in your correlation.
+
+```{r}
+cor_summaries <- summarize(IntroSurvey,
+                               mean_var1 = mean(age, na.rm = TRUE),
+                               sd_var1 = sd(age, na.rm = TRUE),
+                               mean_var2 = mean(birthyear, na.rm = TRUE),
+                               sd_var2 = sd(birthyear, na.rm = TRUE))
+
+cor_summaries
+```
+
+Use the code below, featuring the function `cor.test()`, to calculate your Pearson correlation. **Change the variables** `age` and `birthyear` to whatever two variables you want to run in your correlation.
+
+```{r TEACH ME cor.test}
+cor_report <- cor.test(~ age + birthyear, method = "pearson", data = IntroSurvey)
+
+cor_report
+```
+
+Use the code below, _without any changes,_ to see the estimated Pearson's r for the test above.
+
+```{r}
+cor_report$estimate
+```
+
+Use the code below, _without any changes,_ to see the estimated p-value for the test above.
+
+```{r}
+cor_report$p.value
+```
+
+## T-test
+
+Here is example code for you to use to generate all the statistics you need to report a t-test for Assignment 3. The example code is written to test for a difference in **age** by **binary handedness (right vs not right)** across all participants. This is not a truly meaningful t-test, so you need to change the variables in the code below to variables you want to calculate a t-test for.
+
+In APA format, when reporting the results of a statistical test, you must first report some descriptive statistics about the variables going into the test. When reporting a t-test, you must first report the mean and standard deviation of the dependent variable, separately for participants in both of the independent variable groups.
+
+Use the code below, featuring the functions `group_by()` and `summarize()`, to calculate these descriptive statistics. **Change the variables:** change `handed_binary` to your binary IV of choice for your t-test, and change `age` to your DV of choice.
+
+```{r}
+t_test_summaries <- IntroSurvey %>%
+  group_by(handed_binary) %>%
+  summarize(count_dv = n(),
+            mean_dv = mean(age, na.rm = TRUE),
+            sd_dv = sd(age, na.rm = TRUE))
+
+t_test_summaries
+```
+
+Use the code below, featuring the function `t.test()`, to calculate your t-test. **Change the variables** `handed_binary` and `age` to your IV and DV of choice for your t-test. Remember that the formula is `dv ~ iv`, so the DV goes BEFORE the tilde (~) and the IV goes AFTER the tilde.
+
+```{r TEACH ME t.test}
+t_test_report <- t.test(age ~ handed_binary, data = IntroSurvey)
+
+t_test_report
+```
+
+Use the code below, _without any changes,_ to see the estimated difference in DV value between the two IV groups for the test above.
+
+```{r}
+t_test_report$estimate
+```
+
+Use the code below, _without any changes,_ to see the estimated t-value for the test above.
+
+```{r}
+t_test_report$statistic
+```
+
+Use the code below, _without any changes,_ to see the estimated p-value for the test above.
+
+```{r}
+t_test_report$p.value
+```
+
+# Graphing data
+
+Run this code first to make your plot theme before running any other plot code.
+
+```{r RUN ME bwtheme}
+bwtheme <- theme_bw() + 
+  theme(strip.background = element_rect(fill = 'white')) +
+  theme(plot.title = element_text(size = rel(1))) + 
+  theme(axis.title = element_text(size = rel(1)))
+```
+
+In your Assignment 3 write-up, you can choose to include **either** a scatterplot to go with your Pearson correlation **or** a boxplot to go with your t-test. We have included example code below for both options. Choose the one you want, and edit the code for that one to plot the variables you want and put the correct x-axis label, y-axis label, and title on your plot. You can ignore the code for the other plot.
+
+## Scatter plot
+
+This example scatterplot has `birthyear` on the x-axis and `age` on the y-axis.
+
+```{r create scatterplot}
+ggplot(IntroSurvey, aes(x = birthyear, y = age)) +
+  geom_point(shape = 1) +
+  geom_smooth(method = lm) +
+  # labs() lets you modify various labels in a ggplot
+  labs(title = "Age as a function of birth year",
+       x = "Birth year",
+       y = "Age (years)") +
+  bwtheme
+```
+
+## Box plot
+
+This example boxplot has `handed_binary` on the x-axis and `age` on the y-axis.
+
+```{r create boxplot}
+ggplot(IntroSurvey, aes(x = handed_binary, y = age)) +
+  geom_boxplot() +
+  geom_jitter(position=position_jitter(width = .1, height = 0)) +
+  labs(title = "Age as a function of binary handedness",
+       x = "Handedness",
+       y = "Age (years)") +
+  bwtheme
+```
