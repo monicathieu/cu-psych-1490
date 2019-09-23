@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 require(tidyverse)
 ```
 
-
 # Loading raw data into R
 
 The _first_ thing you do in any data analysis document is to load your fresh raw data into R so you can later work with and calculate statistics on your data.
