@@ -38,7 +38,7 @@ The code below will calculate new _continuous_ columns based on existing raw dat
 
 **If you want to create any new columns of data, you can put them in the chunk below.**
 
-```{r TEACH ME mutate}
+```{r create average cols with mutate}
 IntroSurvey <- mutate(IntroSurvey,
                       regret_total = (regret1 + regret2 + regret3 + regret4 + regret5) / 5,
                       maxi_total = (maxi1 + maxi2 + maxi3 + maxi4 + maxi5 + maxi6) / 6,
@@ -57,7 +57,7 @@ The code below will calculate new _categorical_ columns based on existing raw da
 * `school_binary`: a binary variable indicating whether participants are CC/Barnard-affiliated (grouped together) or GS/SPS-affiliated (grouped together)
 * `handed_binary`: a binary variable indicating whether participants are right-handed vs. anything else
 
-```{r TEACH ME ifelse 1}
+```{r create binary cols with mutate and ifelse}
 IntroSurvey <- mutate(IntroSurvey,
                       dec_mode_binary = ifelse(startsWith(dec_mode, "calculation-based"),
                                           "calc",
@@ -76,7 +76,7 @@ The following code will generate summary statistics about the entire participant
 
 ## Mean, SD, and # no-responses of reported age
 
-```{r TEACH ME summarize}
+```{r summarize age}
 # First, create a summary dataframe to hold the relevant info
 age_summary <- summarize(IntroSurvey,
                          mean_age = mean(age, na.rm = TRUE),
@@ -89,7 +89,7 @@ age_summary
 
 ## Counts of reported gender
 
-```{r TEACH ME count}
+```{r count gender}
 gender_count <- count(IntroSurvey,
                      gender)
 
@@ -106,7 +106,7 @@ In APA format, when reporting the results of a statistical test, you must first 
 
 Use the code below, featuring the function `summarize()`, to calculate these descriptive statistics. **Change the variables** `age` and `birthyear` to whatever two variables you want to run in your correlation.
 
-```{r}
+```{r pre correlation descriptive stats}
 cor_summaries <- summarize(IntroSurvey,
                                mean_var1 = mean(age, na.rm = TRUE),
                                sd_var1 = sd(age, na.rm = TRUE),
@@ -118,7 +118,7 @@ cor_summaries
 
 Use the code below, featuring the function `cor.test()`, to calculate your Pearson correlation. **Change the variables** `age` and `birthyear` to whatever two variables you want to run in your correlation.
 
-```{r TEACH ME cor.test}
+```{r run cor.test}
 cor_report <- cor.test(~ age + birthyear, method = "pearson", data = IntroSurvey)
 
 cor_report
@@ -126,13 +126,13 @@ cor_report
 
 Use the code below, _without any changes,_ to see the estimated Pearson's r for the test above.
 
-```{r}
+```{r cor.test pearson r}
 cor_report$estimate
 ```
 
 Use the code below, _without any changes,_ to see the estimated p-value for the test above.
 
-```{r}
+```{r cor.test p value}
 cor_report$p.value
 ```
 
@@ -144,7 +144,7 @@ In APA format, when reporting the results of a statistical test, you must first 
 
 Use the code below, featuring the functions `group_by()` and `summarize()`, to calculate these descriptive statistics. **Change the variables:** change `handed_binary` to your binary IV of choice for your t-test, and change `age` to your DV of choice.
 
-```{r}
+```{r pre t.test descriptive stats}
 t_test_summaries <- IntroSurvey %>%
   group_by(handed_binary) %>%
   summarize(count_dv = n(),
@@ -156,7 +156,7 @@ t_test_summaries
 
 Use the code below, featuring the function `t.test()`, to calculate your t-test. **Change the variables** `handed_binary` and `age` to your IV and DV of choice for your t-test. Remember that the formula is `dv ~ iv`, so the DV goes BEFORE the tilde (~) and the IV goes AFTER the tilde.
 
-```{r TEACH ME t.test}
+```{r run t.test}
 t_test_report <- t.test(age ~ handed_binary, data = IntroSurvey)
 
 t_test_report
@@ -164,19 +164,19 @@ t_test_report
 
 Use the code below, _without any changes,_ to see the estimated difference in DV value between the two IV groups for the test above.
 
-```{r}
+```{r t.test raw effect size}
 t_test_report$estimate
 ```
 
 Use the code below, _without any changes,_ to see the estimated t-value for the test above.
 
-```{r}
+```{r t.test t value}
 t_test_report$statistic
 ```
 
 Use the code below, _without any changes,_ to see the estimated p-value for the test above.
 
-```{r}
+```{r t.test p value}
 t_test_report$p.value
 ```
 
@@ -184,7 +184,7 @@ t_test_report$p.value
 
 Run this code first to make your plot theme before running any other plot code.
 
-```{r RUN ME bwtheme}
+```{r create bwtheme}
 bwtheme <- theme_bw() + 
   theme(strip.background = element_rect(fill = 'white')) +
   theme(plot.title = element_text(size = rel(1))) + 
