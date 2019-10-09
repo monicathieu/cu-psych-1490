@@ -19,7 +19,7 @@ The _first_ thing you do in any data analysis document is to load your fresh raw
 Read in your data file using `read_csv("classdata_2019.csv")`, and assign it to the dataframe name `IntroSurvey` using the `<-` left-arrow operator.
 
 ```{r}
-IntroSurvey <- read_csv("../classdata_2019.csv")
+IntroSurvey <- read_csv("classdata_2019.csv")
 ```
 
 # Cleaning and manipulating your data
